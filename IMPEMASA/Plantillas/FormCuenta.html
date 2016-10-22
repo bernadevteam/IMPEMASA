@@ -1,0 +1,43 @@
+﻿<md-dialog>
+    <form name="frmCuenta" ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Cuenta </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cerrar()">
+                    <md-icon class="material-icons">&#xE5CD;</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                    <md-input-container class="md-block">
+                        <label>Banco</label>
+                        <md-select ng-model="cuenta.idBanco" ng-required="true">
+                            <md-option ng-repeat="banco in bancos" ng-value="banco.id">
+                                {{banco.nombre}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block" >
+                        <label>N&uacute;mero</label>
+                        <input ng-model="cuenta.numero" ng-required="true" ng-minlength="6">
+                    </md-input-container>
+                 <md-switch ng-model="cuenta.activa">
+                     {{cuenta.activa ? 'Activa' : 'Inactiva'}}
+                </md-switch>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="answer()" ng-disabled="frmCuenta.$invalid">
+                Guardar
+            </md-button>
+            <md-button ng-click="cancel();" md-autofocus>
+                Regresar
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

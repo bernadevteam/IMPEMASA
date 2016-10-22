@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7a021bed7fe04c6e9c8de4c54d61e025" Name="Diagram1" ZoomLevel="47">
+        <EntityTypeShape EntityType="IMPEMASAModel.Bancos" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMPEMASAModel.Cuentas" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMPEMASAModel.Depositos" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMPEMASAModel.DepositoTipos" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMPEMASAModel.VentaTipos" Width="1.5" PointX="0.75" PointY="6" IsExpanded="true" />
+        <AssociationConnector Association="IMPEMASAModel.FK_Cuentas_Bancos" ManuallyRouted="false" />
+        <AssociationConnector Association="IMPEMASAModel.FK_Depositos_Cuentas" ManuallyRouted="false" />
+        <AssociationConnector Association="IMPEMASAModel.FK_Depositos_DepositoTipos" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="IMPEMASAModel.Clientes" Width="1.5" PointX="0.5" PointY="0.5" />
+        <EntityTypeShape EntityType="IMPEMASAModel.Ventas" Width="1.5" PointX="3" PointY="1.25" />
+        <AssociationConnector Association="IMPEMASAModel.FK_Ventas_Clientes" />
+        <AssociationConnector Association="IMPEMASAModel.FK_Depositos_Ventas" />
+        <AssociationConnector Association="IMPEMASAModel.FK_Ventas_VentaTipos" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

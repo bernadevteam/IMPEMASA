@@ -2,43 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>IMPEMASA Web</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/angular-material.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet" />
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "HelpPage" }, null)</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+<body ng-app="impemasapp" layout="column" ng-controller="NavegacionController" ng-cloak>
+    <md-toolbar>
+
+        <div class="md-toolbar-tools">
+            <md-button class="md-mini md-n" aria-label="Menu" ng-click="toggleNav()" md-no-ink>
+                <md-icon class="material-icons">&#xE5D2;</md-icon>
+            </md-button>
+            <h2>IMPEMASA <md-icon class="material-icons" ng-show="moduloAct">&#xE5CC;</md-icon> {{moduloAct}}</h2>
+            <md-progress-circular md-mode="indeterminate" class="md-accent md-hue-2" md-diameter="30" ng-show="activarProgreso"></md-progress-circular>
+            <span flex></span>
+            <md-button class="md-fab md-mini" aria-label="Agregar" ng-click="agregar($event);" ng-show="moduloAct">
+                <md-icon class="material-icons">&#xE145;</md-icon>
+            </md-button>
         </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        @RenderSection("SPAViews", required: false)
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+    </md-toolbar>
+
+    <div class="container" layout="row" flex>
+        <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-4dp" md-component-id="left">
+            <md-list>
+                <md-list-item ng-repeat="modulo in modulos" ng-click="mostrarModulo(modulo)">
+                    {{modulo}}
+                </md-list-item>
+            </md-list>
+        </md-sidenav>
+        <md-content id="content" flex>
+            @RenderBody()
+            @RenderSection("SPAViews", required: false)
+        </md-content>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/angular/angular.min.js"></script>
+    <script src="~/Scripts/angular-animate/angular-animate.js"></script>
+    <script src="~/Scripts/angular-route.min.js"></script>
+    <script src="~/Scripts/angular-aria/angular-aria.min.js"></script>
+    <script src="~/Scripts/angular-messages.min.js"></script>
+    <script src="~/Scripts/angular-material/angular-material.min.js"></script>
+    <script src="~/Scripts/app/angular/app.js"></script>
+    <script src="~/Scripts/app/angular/controllers/NavegacionController.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -1,7 +1,25 @@
-﻿@section SPAViews {
-    @Html.Partial("_Home")
+﻿
+@section SPAViews {
+
+    <div ng-show="moduloAct == 'Bancos'">
+        @Html.Partial("_Home")
+    </div>
+    <div ng-show="moduloAct == 'Cuentas'">
+        @Html.Partial("_Cuentas")
+    </div>
+    <div ng-show="moduloAct == 'Clientes'">
+        @Html.Partial("_Clientes")
+    </div>
+    <div ng-show="moduloAct == 'Ventas'">
+        @Html.Partial("_Ventas")
+    </div>
 }
 @section Scripts{
     @Scripts.Render("~/bundles/knockout")
     @Scripts.Render("~/bundles/app")
+
+    <script src="~/Scripts/app/angular/controllers/BancosController.js"></script>
+    <script src="~/Scripts/app/angular/controllers/CuentasController.js"></script>
+    <script src="~/Scripts/app/angular/controllers/ClientesController.js"></script>
+    <script src="~/Scripts/app/angular/controllers/VentasController.js"></script>
 }

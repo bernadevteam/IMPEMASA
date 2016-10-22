@@ -83,11 +83,12 @@ namespace IMPEMASA
             //    appId: "",
             //    appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "282963924364-6d1j9dik8grqifggjulbocr1gvt0oif0.apps.googleusercontent.com",
+                ClientSecret = "8NXDQmTDYSTncHDTY-fEMuXk",
+                CallbackPath = new PathString("/AuthCallback/Index")
+            });
         }
     }
 }

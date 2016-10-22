@@ -1,0 +1,477 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="IMPEMASAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Bancos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telefono" Type="varchar" MaxLength="12" />
+          <Property Name="Abreviatura" Type="char" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="RNC" Type="varchar" MaxLength="25" />
+          <Property Name="Telefono" Type="varchar" MaxLength="12" />
+          <Property Name="TieneCredito" Type="bit" Nullable="false" />
+          <Property Name="Direccion" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Cuentas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdBanco" Type="int" Nullable="false" />
+          <Property Name="Numero" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="Activa" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Depositos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdVenta" Type="int" Nullable="false" />
+          <Property Name="IdDepositoTipo" Type="int" Nullable="false" />
+          <Property Name="IdCuenta" Type="int" Nullable="false" />
+          <Property Name="Monto" Type="money" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DepositoTipos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ventas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdCliente" Type="int" Nullable="false" />
+          <Property Name="IdVentaTipo" Type="int" Nullable="false" />
+          <Property Name="NoFactura" Type="int" Nullable="false" />
+          <Property Name="SubTotal" Type="money" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
+          <Property Name="ITBIS" Type="money" Nullable="false" />
+          <Property Name="Total" Type="money" Nullable="false" />
+          <Property Name="RNC" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="PagoPendiente" Type="bit" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="VentaTipos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Cuentas_Bancos">
+          <End Role="Bancos" Type="Self.Bancos" Multiplicity="1" />
+          <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bancos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cuentas">
+              <PropertyRef Name="IdBanco" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Depositos_Cuentas">
+          <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="1" />
+          <End Role="Depositos" Type="Self.Depositos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cuentas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Depositos">
+              <PropertyRef Name="IdCuenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Depositos_DepositoTipos">
+          <End Role="DepositoTipos" Type="Self.DepositoTipos" Multiplicity="1" />
+          <End Role="Depositos" Type="Self.Depositos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DepositoTipos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Depositos">
+              <PropertyRef Name="IdDepositoTipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Depositos_Ventas">
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="1" />
+          <End Role="Depositos" Type="Self.Depositos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ventas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Depositos">
+              <PropertyRef Name="IdVenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ventas_Clientes">
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ventas">
+              <PropertyRef Name="IdCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ventas_VentaTipos">
+          <End Role="VentaTipos" Type="Self.VentaTipos" Multiplicity="1" />
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VentaTipos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ventas">
+              <PropertyRef Name="IdVentaTipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IMPEMASAModelStoreContainer">
+          <EntitySet Name="Bancos" EntityType="Self.Bancos" Schema="IMPEMASA" store:Type="Tables" />
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="IMPEMASA" store:Type="Tables" />
+          <EntitySet Name="Cuentas" EntityType="Self.Cuentas" Schema="IMPEMASA" store:Type="Tables" />
+          <EntitySet Name="Depositos" EntityType="Self.Depositos" Schema="IMPEMASA" store:Type="Tables" />
+          <EntitySet Name="DepositoTipos" EntityType="Self.DepositoTipos" Schema="IMPEMASA" store:Type="Tables" />
+          <EntitySet Name="Ventas" EntityType="Self.Ventas" Schema="IMPEMASA" store:Type="Tables" />
+          <EntitySet Name="VentaTipos" EntityType="Self.VentaTipos" Schema="IMPEMASA" store:Type="Tables" />
+          <AssociationSet Name="FK_Cuentas_Bancos" Association="Self.FK_Cuentas_Bancos">
+            <End Role="Bancos" EntitySet="Bancos" />
+            <End Role="Cuentas" EntitySet="Cuentas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Depositos_Cuentas" Association="Self.FK_Depositos_Cuentas">
+            <End Role="Cuentas" EntitySet="Cuentas" />
+            <End Role="Depositos" EntitySet="Depositos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Depositos_DepositoTipos" Association="Self.FK_Depositos_DepositoTipos">
+            <End Role="DepositoTipos" EntitySet="DepositoTipos" />
+            <End Role="Depositos" EntitySet="Depositos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Depositos_Ventas" Association="Self.FK_Depositos_Ventas">
+            <End Role="Ventas" EntitySet="Ventas" />
+            <End Role="Depositos" EntitySet="Depositos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ventas_Clientes" Association="Self.FK_Ventas_Clientes">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="Ventas" EntitySet="Ventas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ventas_VentaTipos" Association="Self.FK_Ventas_VentaTipos">
+            <End Role="VentaTipos" EntitySet="VentaTipos" />
+            <End Role="Ventas" EntitySet="Ventas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IMPEMASAModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Bancos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Telefono" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="Abreviatura" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Cuentas" Relationship="Self.FK_Cuentas_Bancos" FromRole="Bancos" ToRole="Cuentas" />
+        </EntityType>
+        <EntityType Name="Cuentas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdBanco" Type="Int32" Nullable="false" />
+          <Property Name="Numero" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Activa" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Bancos" Relationship="Self.FK_Cuentas_Bancos" FromRole="Cuentas" ToRole="Bancos" />
+          <NavigationProperty Name="Depositos" Relationship="Self.FK_Depositos_Cuentas" FromRole="Cuentas" ToRole="Depositos" />
+        </EntityType>
+        <EntityType Name="Depositos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdVenta" Type="Int32" Nullable="false" />
+          <Property Name="IdDepositoTipo" Type="Int32" Nullable="false" />
+          <Property Name="IdCuenta" Type="Int32" Nullable="false" />
+          <Property Name="Monto" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Cuentas" Relationship="Self.FK_Depositos_Cuentas" FromRole="Depositos" ToRole="Cuentas" />
+          <NavigationProperty Name="DepositoTipos" Relationship="Self.FK_Depositos_DepositoTipos" FromRole="Depositos" ToRole="DepositoTipos" />
+          <NavigationProperty Name="Ventas" Relationship="IMPEMASAModel.FK_Depositos_Ventas" FromRole="Depositos" ToRole="Ventas" />
+        </EntityType>
+        <EntityType Name="DepositoTipos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Depositos" Relationship="Self.FK_Depositos_DepositoTipos" FromRole="DepositoTipos" ToRole="Depositos" />
+        </EntityType>
+        <EntityType Name="VentaTipos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Ventas" Relationship="IMPEMASAModel.FK_Ventas_VentaTipos" FromRole="VentaTipos" ToRole="Ventas" />
+        </EntityType>
+        <Association Name="FK_Cuentas_Bancos">
+          <End Role="Bancos" Type="Self.Bancos" Multiplicity="1" />
+          <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bancos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cuentas">
+              <PropertyRef Name="IdBanco" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Depositos_Cuentas">
+          <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="1" />
+          <End Role="Depositos" Type="Self.Depositos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cuentas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Depositos">
+              <PropertyRef Name="IdCuenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Depositos_DepositoTipos">
+          <End Role="DepositoTipos" Type="Self.DepositoTipos" Multiplicity="1" />
+          <End Role="Depositos" Type="Self.Depositos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DepositoTipos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Depositos">
+              <PropertyRef Name="IdDepositoTipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IMPEMASAEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bancos" EntityType="Self.Bancos" />
+          <EntitySet Name="Cuentas" EntityType="Self.Cuentas" />
+          <EntitySet Name="Depositos" EntityType="Self.Depositos" />
+          <EntitySet Name="DepositoTipos" EntityType="Self.DepositoTipos" />
+          <EntitySet Name="VentaTipos" EntityType="Self.VentaTipos" />
+          <AssociationSet Name="FK_Cuentas_Bancos" Association="Self.FK_Cuentas_Bancos">
+            <End Role="Bancos" EntitySet="Bancos" />
+            <End Role="Cuentas" EntitySet="Cuentas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Depositos_Cuentas" Association="Self.FK_Depositos_Cuentas">
+            <End Role="Cuentas" EntitySet="Cuentas" />
+            <End Role="Depositos" EntitySet="Depositos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Depositos_DepositoTipos" Association="Self.FK_Depositos_DepositoTipos">
+            <End Role="DepositoTipos" EntitySet="DepositoTipos" />
+            <End Role="Depositos" EntitySet="Depositos" />
+          </AssociationSet>
+          <EntitySet Name="Clientes" EntityType="IMPEMASAModel.Clientes" />
+          <EntitySet Name="Ventas" EntityType="IMPEMASAModel.Ventas" />
+          <AssociationSet Name="FK_Ventas_Clientes" Association="IMPEMASAModel.FK_Ventas_Clientes">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="Ventas" EntitySet="Ventas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Depositos_Ventas" Association="IMPEMASAModel.FK_Depositos_Ventas">
+            <End Role="Ventas" EntitySet="Ventas" />
+            <End Role="Depositos" EntitySet="Depositos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ventas_VentaTipos" Association="IMPEMASAModel.FK_Ventas_VentaTipos">
+            <End Role="VentaTipos" EntitySet="VentaTipos" />
+            <End Role="Ventas" EntitySet="Ventas" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="RNC" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="TieneCredito" Type="Boolean" Nullable="false" />
+          <Property Name="Direccion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Ventas" Relationship="IMPEMASAModel.FK_Ventas_Clientes" FromRole="Clientes" ToRole="Ventas" />
+        </EntityType>
+        <EntityType Name="Ventas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCliente" Type="Int32" Nullable="false" />
+          <Property Name="IdVentaTipo" Type="Int32" Nullable="false" />
+          <Property Name="NoFactura" Type="Int32" Nullable="false" />
+          <Property Name="SubTotal" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ITBIS" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Total" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="RNC" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="PagoPendiente" Type="Boolean" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Clientes" Relationship="IMPEMASAModel.FK_Ventas_Clientes" FromRole="Ventas" ToRole="Clientes" />
+          <NavigationProperty Name="Depositos" Relationship="IMPEMASAModel.FK_Depositos_Ventas" FromRole="Ventas" ToRole="Depositos" />
+          <NavigationProperty Name="VentaTipos" Relationship="IMPEMASAModel.FK_Ventas_VentaTipos" FromRole="Ventas" ToRole="VentaTipos" />
+        </EntityType>
+        <Association Name="FK_Ventas_Clientes">
+          <End Type="IMPEMASAModel.Clientes" Role="Clientes" Multiplicity="1" />
+          <End Type="IMPEMASAModel.Ventas" Role="Ventas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ventas">
+              <PropertyRef Name="IdCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Depositos_Ventas">
+          <End Type="IMPEMASAModel.Ventas" Role="Ventas" Multiplicity="1" />
+          <End Type="IMPEMASAModel.Depositos" Role="Depositos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ventas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Depositos">
+              <PropertyRef Name="IdVenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ventas_VentaTipos">
+          <End Type="IMPEMASAModel.VentaTipos" Role="VentaTipos" Multiplicity="1" />
+          <End Type="IMPEMASAModel.Ventas" Role="Ventas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VentaTipos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ventas">
+              <PropertyRef Name="IdVentaTipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IMPEMASAModelStoreContainer" CdmEntityContainer="IMPEMASAEntities">
+          <EntitySetMapping Name="Bancos">
+            <EntityTypeMapping TypeName="IMPEMASAModel.Bancos">
+              <MappingFragment StoreEntitySet="Bancos">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Abreviatura" ColumnName="Abreviatura" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cuentas">
+            <EntityTypeMapping TypeName="IMPEMASAModel.Cuentas">
+              <MappingFragment StoreEntitySet="Cuentas">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdBanco" ColumnName="IdBanco" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Activa" ColumnName="Activa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Depositos">
+            <EntityTypeMapping TypeName="IMPEMASAModel.Depositos">
+              <MappingFragment StoreEntitySet="Depositos">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdVenta" ColumnName="IdVenta" />
+                <ScalarProperty Name="IdDepositoTipo" ColumnName="IdDepositoTipo" />
+                <ScalarProperty Name="IdCuenta" ColumnName="IdCuenta" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DepositoTipos">
+            <EntityTypeMapping TypeName="IMPEMASAModel.DepositoTipos">
+              <MappingFragment StoreEntitySet="DepositoTipos">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VentaTipos">
+            <EntityTypeMapping TypeName="IMPEMASAModel.VentaTipos">
+              <MappingFragment StoreEntitySet="VentaTipos">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clientes">
+            <EntityTypeMapping TypeName="IMPEMASAModel.Clientes">
+              <MappingFragment StoreEntitySet="Clientes">
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="TieneCredito" ColumnName="TieneCredito" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="RNC" ColumnName="RNC" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ventas">
+            <EntityTypeMapping TypeName="IMPEMASAModel.Ventas">
+              <MappingFragment StoreEntitySet="Ventas">
+                <ScalarProperty Name="PagoPendiente" ColumnName="PagoPendiente" />
+                <ScalarProperty Name="RNC" ColumnName="RNC" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="ITBIS" ColumnName="ITBIS" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="NoFactura" ColumnName="NoFactura" />
+                <ScalarProperty Name="IdVentaTipo" ColumnName="IdVentaTipo" />
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

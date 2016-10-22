@@ -1,0 +1,43 @@
+﻿<md-content class="md-padding" layout="row" layout-wrap layout-fill style="min-height: 224px;" ng-controller="VentasController">
+    <div flex-xs flex-sm="50" flex-gt-sm="33" ng-repeat="venta in ventas">
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-headline">{{venta.cliente}}</span>
+                    <span class="md-subhead">{{venta.fecha}} RNC: {{venta.rnc}}</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <md-subheader class="md-no-sticky">Venta</md-subheader>
+                <md-list flex>
+                    <md-list-item>
+                        Monto
+                        <span flex></span>
+                        {{venta.total | currency:"RD$"}}
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-subheader class="md-no-sticky">Depositos</md-subheader>
+                    <md-list-item>
+                        Total
+                        <span flex></span>
+                        {{venta.total | currency:"RD$"}}
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item>
+                        Pendiente
+                        <span flex></span>
+                        {{venta.total| currency:"RD$"}}
+</md-list>
+
+            </md-card-content>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button class="md-mini md-n md-icon-button" aria-label="Modificar" ng-click="editar($event, venta);" md-no-ink>
+                    <md-icon class="material-icons">&#xE254;</md-icon>
+                </md-button>
+                <md-button class="md-mini md-n md-icon-button" aria-label="Agregar deposito" ng-click="editar($event, venta);" md-no-ink>
+                    <md-icon class="material-icons">&#xE227;</md-icon>
+                </md-button>
+            </md-card-actions>
+        </md-card>
+    </div>
+</md-content>

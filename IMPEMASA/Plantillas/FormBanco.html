@@ -1,0 +1,51 @@
+﻿<md-dialog aria-label="Banco">
+    <form name="frmBanco" ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Banco </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cerrar()">
+                    <md-icon class="material-icons">&#xE5CD;</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Nombre</label>
+                        <input ng-model="banco.nombre" ng-required="true">
+                    </md-input-container>
+                    <md-input-container class="md-block upper" flex-gt-sm>
+                        <label>Abreviatura</label>
+                        <input ng-model="banco.abreviatura" name="abrev" ng-required="true" md-maxlength="2" ng-minlength="2" ng-maxlength="2">
+                        <div ng-messages="frmBanco.abrev.$error" role="alert">
+                            <div ng-message="required">Por favor escribe abreviatura.</div>
+                            <div ng-message="maxlength">
+                                Con dos letras basta.
+                            </div>
+                            <div ng-message="minlength">
+                                Dos letras.
+                            </div>
+                            </div>
+</md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Tel&eacute;fono</label>
+                        <input ng-model="banco.telefono" type="tel">
+                    </md-input-container>
+                </div>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="answer('not useful')" ng-disabled="frmBanco.$invalid">
+                Guardar
+            </md-button>
+            <md-button ng-click="cancel();" md-autofocus>
+                Regresar
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
