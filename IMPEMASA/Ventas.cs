@@ -32,8 +32,8 @@ namespace IMPEMASA
         public Nullable<bool> PagoPendiente { get; set; }
     
         public virtual Clientes Clientes { get; set; }
+        public virtual VentaTipos VentaTipos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Depositos> Depositos { get; set; }
-        public virtual VentaTipos VentaTipos { get; set; }
     }
 }

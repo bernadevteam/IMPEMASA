@@ -2,7 +2,7 @@
     <form name="frmCliente" ng-cloak>
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Cliente </h2>
+                <h2>{{cliente.id ? 'Modificar' : 'Agregar'}} cliente </h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cerrar()">
                     <md-icon class="material-icons">&#xE5CD;</md-icon>
@@ -13,13 +13,9 @@
         <md-dialog-content>
             <div class="md-dialog-content">
                 <div layout-gt-sm="row">
-                    <md-input-container class="md-block" flex-gt-sm>
+                    <md-input-container class="md-block" flex>
                         <label>Nombre</label>
                         <input ng-model="cliente.nombre" ng-required="true" ng-minlength="3">
-                    </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>Apellidos</label>
-                        <input ng-model="cliente.apellidos" ng-required="true" ng-minlength="3">
                     </md-input-container>
                 </div>
                 <div layout-gt-sm="row">
@@ -29,12 +25,12 @@
                     </md-input-container>
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Tel&eacute;fono</label>
-                        <input ng-model="cliente.telefono" ng-required="true" ng-minlength="3">
+                        <input ng-model="cliente.telefono" >
                     </md-input-container>
                 </div>
                 <md-input-container class="md-block" flex>
                     <label>Direcci&oacute;n</label>
-                    <input ng-model="cliente.direccion" ng-required="true" ng-minlength="3">
+                    <input ng-model="cliente.direccion">
                 </md-input-container>
                 <md-switch ng-model="cliente.tieneCredito">
                     {{cliente.tieneCredito ? 'Con credito' : 'Sin credito'}}

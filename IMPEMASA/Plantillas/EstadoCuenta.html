@@ -1,0 +1,46 @@
+﻿<md-dialog flex-gt-sm="40" flex>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>{{cliente.cliente}}</h2> 
+            <span flex></span>
+            {{fecha}}
+            <md-button class="md-icon-button" ng-click="cerrar()">
+                <md-icon class="material-icons">&#xE5CD;</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>        
+        <div class="md-dialog-content">
+            <h3 class="md-headline">Facturas pendientes</h3>
+            <hr />
+            <md-list>
+                <md-list-item>
+                    <div layout="row" flex>
+                        <div flex="20">Factura</div>
+                        <div flex="20">Fecha</div>
+                        <div flex="20">Vencimiento</div>
+                        <div flex="40" layout="row" layout-align="end start">Monto</div>
+                    </div>
+                </md-list-item>
+                {{total = 0.0;""}}
+                <md-divider></md-divider>
+                <md-list-item ng-repeat="venta in pendientes">
+                    <div layout="row" flex>
+                        <div flex="20">{{venta.noFactura}}</div>
+                        <div flex="20">{{venta.fecha}}</div>
+                        <div flex="20">{{venta.fechaVencimiento}}</div>
+                        <div flex="40" layout="row" layout-align="end start">{{venta.totalPendiente | currency:"RD$"}}</div>
+                    </div>
+                </md-list-item>
+                <md-divider></md-divider>
+                <md-list-item>
+                    <div layout="row" flex>
+                        <strong>{{pendientes.length}} factura{{pendientes.length == 1 ? '' : 's'}}</strong>
+                        <span flex></span>
+                        <strong> {{sumaPendientes | currency:"RD$"}}</strong>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </div>
+    </md-dialog-content>
+</md-dialog>

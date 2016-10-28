@@ -1,4 +1,5 @@
-﻿angular.module('impemasapp')
+﻿/// <reference path="ClientesController.js" />
+angular.module('impemasapp')
 .controller('ClientesController', function ($scope, $mdSidenav, $mdDialog, $http, $mdToast) {
     $scope.clientes = [];
     $scope.cliente = {};
@@ -7,6 +8,7 @@
 
     $http.get(urlcliente).then(function (res) {
         $scope.clientes = res.data;
+        enviarCambioClientes();
     });
 
 
@@ -32,6 +34,7 @@
         .position('top right')
         .hideDelay(3000)
     );
+                 enviarCambioClientes();
              });
          } else {
              $http.post(urlcliente, cliente).then(function (res) {
@@ -41,6 +44,7 @@
         .position('top right')
         .hideDelay(3000)
     );
+                 enviarCambioClientes();
              });
          }
      }).finally(function () {
@@ -56,6 +60,9 @@
 
     $scope.editar = manejocliente;
 
+    function enviarCambioClientes() {
+        $scope.$emit('CambioClientes', $scope.clientes);
+    }
 });
 
 function DialogClienteController($scope, $mdDialog, modelo) {
@@ -70,6 +77,7 @@ function DialogClienteController($scope, $mdDialog, modelo) {
     };
 
     $scope.answer = function () {
+        $scope.cliente.nombre = $scope.cliente.nombre.toUpperCase();
         $mdDialog.hide($scope.cliente);
     };
 }

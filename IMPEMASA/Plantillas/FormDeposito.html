@@ -1,10 +1,9 @@
 ﻿<md-dialog aria-label="Venta">
     <form name="frmVenta" ng-cloak>
-        <md-toolbar class="ng-class:{'md-warn md-hue-2' : venta.pagoPendiente}">
+        <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Venta </h2>
+                <h2>{{deposito.id ? 'Modificar' : 'Agregar'}} deposito </h2>
                 <span flex></span>
-                {{venta.pagoPendiente ? 'Pago pendiente' : 'Saldada'}}
                 <md-button class="md-icon-button" ng-click="cerrar()">
                     <md-icon class="material-icons">&#xE5CD;</md-icon>
                 </md-button>
@@ -14,57 +13,36 @@
         <md-dialog-content>
             <div class="md-dialog-content">
                 <div layout-gt-sm="row">
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>Cliente</label>
-                        <md-select ng-model="cliente" ng-required="true">
-                            <md-option ng-repeat="cliente in clientes" ng-value="cliente">
-                                {{cliente.nombre}}
+                    <md-input-container class="md-block" flex>
+                        <label>Cuenta</label>
+                        <md-select ng-model="deposito.idCuenta" ng-required="true">
+                            <md-option ng-repeat="cuenta in cuentas" ng-value="cuenta.id">
+                                [{{cuenta.bancoAb}}] {{cuenta.numero}}
                             </md-option>
                         </md-select>
                     </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>RNC</label>
-                        <input ng-model="venta.rnc" ng-required="true" disabled>
-                    </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>Tipo</label>
-                        <md-select ng-model="venta.idVentaTipo" ng-required="true">
-                            <md-option ng-repeat="tipo in tiposVenta" ng-value="tipo.id">
-                                {{tipo.nombre}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
-                </div>
-                <div layout-gt-sm="row" class="md-block" flex-gt-sm>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>Factura No.</label>
-                        <input ng-model="venta.noFactura" ng-required="true" type="number">
-                    </md-input-container>
-                   <div>
-                       <md-input-container>
-                           <label>Fecha</label>
-                           <md-datepicker ng-model="fechaFactura" ng-change="venta.fecha = fechaFactura;"></md-datepicker>
-                       </md-input-container>
-                   </div>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>Sub-Total (RD$)</label>
-                        <input ng-model="venta.subTotal" ng-required="true" type="number" ng-change="calcular()">
-                        <md-icon class="material-icons">&#xE227;</md-icon>
-                    </md-input-container>
-                </div>
-                <md-list flex>
-                    <md-list-item>
-                        ITBIS 
-                        <span flex></span>
-                        {{venta.itbis| currency:"RD$"}}
-                    </md-list-item>
-
-                    <md-list-item>
-                        Total
-                        <span flex></span>
-                        {{venta.total| currency:"RD$"}}
-                    </md-list-item>
-                    </md-list>
+                    </div>
+                    <div layout-gt-sm="row">
+                        <div>
+                            <md-input-container>
+                                <label>Fecha</label>
+                                <md-datepicker ng-required="true" ng-model="fechaDeposito" ng-change="deposito.fecha = fechaDeposito;"></md-datepicker>
+                            </md-input-container>
+                        </div>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <md-icon class="material-icons">&#xE227;</md-icon>
+                            <label>Monto (RD$)</label>
+                            <input ng-model="deposito.monto" ng-required="true" type="number">
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <md-icon class="material-icons">&#xE8B0;</md-icon>
+                            <label>Referencia</label>
+                            <input ng-model="deposito.referencia">
+                        </md-input-container>
+                    </div>
+                <md-radio-group ng-model="deposito.idDepositoTipo" ng-required="true">
+                    <md-radio-button ng-repeat="tipo in tipos" value="{{tipo.id}}" class="md-primary">{{tipo.nombre}}</md-radio-button>
+                </md-radio-group>
 </div>
         </md-dialog-content>
 

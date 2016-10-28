@@ -5,3 +5,8 @@
 #content{
     padding:15px;
 }
+
+md-card > md-card-header > md-card-avatar > i.material-icons{
+    font-size:45px;
+    cursor:pointer;
+} 

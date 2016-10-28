@@ -12,27 +12,22 @@ using IMPEMASA;
 
 namespace IMPEMASA.Controllers
 {
+    [Authorize]
     public class VentasController : ApiController
     {
         private IMPEMASAEntities db = new IMPEMASAEntities();
 
         // GET: api/Ventas
-        public IEnumerable<object> GetVentas()
+        [HttpGet]
+        public IEnumerable<object> Buscar()
         {
             return db.Ventas.ToList().Select(v => ConvertirVenta(v));
         }
 
-        // GET: api/Ventas/5
-        [ResponseType(typeof(Ventas))]
-        public IHttpActionResult GetVentas(int id)
+        [HttpGet]
+        public IEnumerable<object> VentasPendientes()
         {
-            Ventas ventas = db.Ventas.Find(id);
-            if (ventas == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(ventas);
+            return db.Ventas.ToList().Select(v => ConvertirVenta(v));
         }
 
         // PUT: api/Ventas/5
@@ -62,7 +57,7 @@ namespace IMPEMASA.Controllers
                 }
             }
 
-            return Ok(ConvertirVenta(db.Ventas.
+            return Ok(ConvertirVentaPut(db.Ventas.
                 Include(v => v.VentaTipos)
                 .Include(v => v.Clientes)
                 .First(v => ventas.Id.Equals(v.Id))));
@@ -72,7 +67,7 @@ namespace IMPEMASA.Controllers
         [ResponseType(typeof(Ventas))]
         public IHttpActionResult PostVentas(Ventas ventas)
         {
-            if (!ModelState.IsValid)
+                if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -124,6 +119,38 @@ namespace IMPEMASA.Controllers
                 IdVentaTipo = v.IdVentaTipo,
                 IdCliente = v.IdCliente,
                 Fecha = v.Fecha.ToString("MM/dd/yyyy"),
+                FechaVencimiento = v.Fecha.AddMonths(1).AddDays(1).ToString("MM/dd/yyyy"),
+                ITBIS = v.ITBIS,
+                NoFactura = v.NoFactura,
+                PagoPendiente = v.PagoPendiente,
+                RNC = v.RNC,
+                SubTotal = v.SubTotal,
+                Total = v.Total,
+                Cliente = v.Clientes.Nombre,
+                Tipo = v.VentaTipos.Nombre,
+                Depositos = v.Depositos.Select(d => new {
+                    Id = d.Id,
+                    IdCuenta = d.IdCuenta,
+                    IdDepositoTipo = d.IdDepositoTipo,
+                    IdVenta = d.IdVenta,
+                    Cuenta = d.Cuentas.Numero,
+                    Banco = d.Cuentas.Bancos.Abreviatura,
+                    Tipo = d.DepositoTipos.Nombre,
+                    Monto = d.Monto,
+                    Fecha = d.Fecha.ToString("MM/dd/yyyy")
+                })
+            };
+        }
+
+        private object ConvertirVentaPut(Ventas v)
+        {
+            return new
+            {
+                Id = v.Id,
+                IdVentaTipo = v.IdVentaTipo,
+                IdCliente = v.IdCliente,
+                Fecha = v.Fecha.ToString("MM/dd/yyyy"),
+                FechaVencimiento = v.Fecha.AddMonths(1).AddDays(1).ToString("MM/dd/yyyy"),
                 ITBIS = v.ITBIS,
                 NoFactura = v.NoFactura,
                 PagoPendiente = v.PagoPendiente,
@@ -134,5 +161,6 @@ namespace IMPEMASA.Controllers
                 Tipo = v.VentaTipos.Nombre
             };
         }
+
     }
 }

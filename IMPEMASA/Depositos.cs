@@ -20,6 +20,7 @@ namespace IMPEMASA
         public int IdCuenta { get; set; }
         public decimal Monto { get; set; }
         public System.DateTime Fecha { get; set; }
+        public string Referencia { get; set; }
     
         public virtual Cuentas Cuentas { get; set; }
         public virtual DepositoTipos DepositoTipos { get; set; }

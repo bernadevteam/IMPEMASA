@@ -1,8 +1,8 @@
 ﻿<md-list ng-controller="ClientesController">
     <md-list-item ng-repeat="cliente in clientes">
-        <p>{{cliente.nombreCompleto.toUpperCase()}}</p>
+        <p>{{cliente.nombre.toUpperCase()}}</p>
         <md-button class="md-mini md-n" aria-label="Menu" ng-click="editar($event, cliente);" md-no-ink>
-            <md-icon class="material-icons">&#xE254;</md-icon>
+            <md-icon class="material-icons md-accent">&#xE254;</md-icon>
         </md-button>
     </md-list-item>
 </md-list>

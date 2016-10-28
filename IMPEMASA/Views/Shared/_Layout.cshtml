@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/Content/angular-material.min.css" rel="stylesheet" />
     <link href="~/Content/Site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet" />
 </head>
@@ -14,10 +15,10 @@
     <md-toolbar>
 
         <div class="md-toolbar-tools">
-            <md-button class="md-mini md-n" aria-label="Menu" ng-click="toggleNav()" md-no-ink>
-                <md-icon class="material-icons">&#xE5D2;</md-icon>
-            </md-button>
-            <h2>IMPEMASA <md-icon class="material-icons" ng-show="moduloAct">&#xE5CC;</md-icon> {{moduloAct}}</h2>
+            <h2>IMPEMASA <md-icon class="material-icons" ng-show="moduloAct">&#xE5CC;</md-icon></h2>
+            <md-select ng-model="moduloAct" class="md-no-underline md-warm md-hue-2">
+                <md-option ng-repeat="modulo in modulos" ng-value="modulo">{{modulo}}</md-option>
+            </md-select>
             <md-progress-circular md-mode="indeterminate" class="md-accent md-hue-2" md-diameter="30" ng-show="activarProgreso"></md-progress-circular>
             <span flex></span>
             <md-button class="md-fab md-mini" aria-label="Agregar" ng-click="agregar($event);" ng-show="moduloAct">
@@ -27,13 +28,6 @@
     </md-toolbar>
 
     <div class="container" layout="row" flex>
-        <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-4dp" md-component-id="left">
-            <md-list>
-                <md-list-item ng-repeat="modulo in modulos" ng-click="mostrarModulo(modulo)">
-                    {{modulo}}
-                </md-list-item>
-            </md-list>
-        </md-sidenav>
         <md-content id="content" flex>
             @RenderBody()
             @RenderSection("SPAViews", required: false)

@@ -27,10 +27,10 @@ namespace IMPEMASA
     
         public virtual DbSet<Bancos> Bancos { get; set; }
         public virtual DbSet<Cuentas> Cuentas { get; set; }
-        public virtual DbSet<Depositos> Depositos { get; set; }
         public virtual DbSet<DepositoTipos> DepositoTipos { get; set; }
         public virtual DbSet<VentaTipos> VentaTipos { get; set; }
         public virtual DbSet<Clientes> Clientes { get; set; }
         public virtual DbSet<Ventas> Ventas { get; set; }
+        public virtual DbSet<Depositos> Depositos { get; set; }
     }
 }

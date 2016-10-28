@@ -1,20 +1,60 @@
 ﻿angular.module('impemasapp')
-.controller('VentasController', function ($scope, $mdSidenav, $mdDialog, $http, $mdToast) {
+.controller('VentasController', function ($scope, $filter, $mdSidenav, $mdDialog, $http, $mdToast) {
     $scope.ventas = [];
     $scope.venta = {};
+    var tiposDeps = [],
+        clientes = [],
+        tiposVentas = [],
+    cuentas = [];
 
-    var urlventa = 'api/Ventas';
+    var urlventa = 'api/Ventas',
+        urlCuentas = 'api/Cuentas',
+        urltipos = 'api/VentaTipos',
+        urldeposito = 'api/Depositos'
+    urlDepTipos = 'api/DepositoTipos';
 
-    $http.get(urlventa).then(function (res) {
+    $http.get(urlventa + '/VentasPendientes').then(function (res) {
         $scope.ventas = res.data;
+        $http.get(urlDepTipos).then(function (tiposdatas) {
+            tiposDeps = tiposdatas.data;
+            $http.get(urlCuentas).then(function (cuentasdata) {
+                cuentas = cuentasdata.data;
+                $http.get('api/VentaTipos').then(function (restipos) {
+                    tiposVentas = restipos.data;
+                });
+            });
+        });
     });
+
+    $scope.verEstadoCuenta = function (ev, idCliente) {
+        var pendientes = $filter('filter')($scope.ventas, { idCliente: idCliente });
+
+        $mdDialog.show({
+            locals: { pendientes: pendientes },
+            controller: DialogEstadoCuentaController,
+            templateUrl: 'Plantillas/EstadoCuenta.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: false
+        })
+    }
+
+    $scope.totalDepositos = function (depositos) {
+        var total = 0.0;
+
+        for (var i = 0; i < depositos.length; i++) {
+            total += depositos[i].monto;
+        }
+
+        return total;
+    }
 
     var manejoventa = function (ev, ventaSel) {
         var ctaPivot = { pagoPendiente: true };
         angular.merge(ctaPivot, ventaSel);
 
         $mdDialog.show({
-            locals: { modelo: ctaPivot },
+            locals: { modelo: ctaPivot, clientes: clientes, tipoventas: tiposVentas },
             controller: DialogVentaController,
             templateUrl: 'Plantillas/FormVenta.html',
             parent: angular.element(document.body),
@@ -53,17 +93,58 @@
         }
     });
 
+    $scope.$on('CambioClientesBc', function (ev, data) {
+        clientes = data;
+    });
+
+    var manejodeposito = function (ev, venta, depSel) {
+        var ctaPivot = { idVenta: venta.id };
+        angular.merge(ctaPivot, depSel);
+
+        $mdDialog.show({
+            locals: { modelo: ctaPivot, tipos: tiposDeps, cuentas: cuentas },
+            controller: DialogDepositoController,
+            templateUrl: 'Plantillas/FormDeposito.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: false
+        })
+     .then(function (deposito) {
+         //Resultado popup
+         if (deposito.id != null) {
+             $http.put(urldeposito, deposito).then(function (res) {
+                 angular.merge(depSel, res.data);
+                 $mdToast.show($mdToast.simple()
+        .textContent('Modificado con exito!')
+        .position('top right')
+        .hideDelay(3000)
+    );
+             });
+         } else {
+             $http.post(urldeposito, deposito).then(function (res) {
+                 venta.depositos.push(res.data);
+                 $mdToast.show($mdToast.simple()
+        .textContent('Creado con exito!')
+        .position('top right')
+        .hideDelay(3000)
+    );
+             });
+         }
+     });
+    };
+
+
     $scope.editar = manejoventa;
+    $scope.editarDeposito = manejodeposito
 
 });
 
-function DialogVentaController($scope, $mdDialog, $http, $filter, modelo) {
+function DialogVentaController($scope, $mdDialog, $http, $filter, modelo, clientes, tipoventas) {
     $scope.venta = modelo;
-    $scope.clientes = ['Cargando...'];
     $scope.tiposVenta = ['Cargando...'];
-    $scope.cargandoMsg = 'Cargando clientes...';
     $scope.cliente = {};
     $scope.fechaFactura = {};
+    $scope.tiposVenta = tipoventas;
 
     $scope.$watch('cliente', function (n) {
         if (n.id) {
@@ -72,20 +153,12 @@ function DialogVentaController($scope, $mdDialog, $http, $filter, modelo) {
         }
     });
 
-    $http.get('api/Clientes').then(function (res) {
-        $scope.clientes = res.data;
-        if (modelo.id) {
-            $scope.cliente = $filter('filter')($scope.clientes, { id: modelo.idCliente })[0];
-            $scope.fechaFactura = moment(modelo.fecha,'MM/DD/YYYY').toDate();
-
-        }
-        $scope.cargandoMsg = 'Cargando tipo ventas...';
-        $http.get('api/VentaTipos').then(function (restipos) {
-            $scope.tiposVenta = restipos.data;
-            $scope.cargandoMsg = null;
-        });
-    });
-
+    $scope.clientes = clientes;
+    if (modelo.id) {
+        $scope.cliente = $filter('filter')($scope.clientes, { id: modelo.idCliente })[0];
+        $scope.fechaFactura = moment(modelo.fecha, 'MM/DD/YYYY').toDate();
+    }
+       
     $scope.calcular = function () {
         var st = $scope.venta.subTotal;
         var itbis = 0.18;
@@ -108,5 +181,52 @@ function DialogVentaController($scope, $mdDialog, $http, $filter, modelo) {
 
     $scope.answer = function () {
         $mdDialog.hide($scope.venta);
+    };
+}
+
+function DialogDepositoController($scope, $mdDialog, $http, $filter, modelo, tipos, cuentas) {
+    $scope.deposito = modelo;
+    $scope.cuentas = cuentas;
+    $scope.tipos = tipos;
+    if (modelo.id) {
+        $scope.fechaDeposito = moment(modelo.fecha, 'MM/DD/YYYY').toDate();
+    }
+
+    $scope.cerrar = function () {
+        $mdDialog.cancel();
+    };
+
+    $scope.cancel = function () {
+        $mdDialog.cancel();
+    };
+
+    $scope.answer = function () {
+        $mdDialog.hide($scope.deposito);
+    };
+}
+
+function DialogEstadoCuentaController($scope, $mdDialog, pendientes) {
+    $scope.pendientes = pendientes;
+    $scope.cliente = pendientes[0];
+
+    $scope.fecha = moment().format('MM/DD/YYYY');
+    $scope.fechaVencimiento = moment().format('MM/DD/YYYY');
+
+    $scope.cerrar = function () {
+        $mdDialog.cancel();
+    };
+
+    $scope.cancel = function () {
+        $mdDialog.cancel();
+    };
+
+    $scope.sumaPendientes = 0.0;
+
+    for (var i in pendientes) {
+        $scope.sumaPendientes = $scope.sumaPendientes + pendientes[i].totalPendiente;
+    }
+
+    $scope.answer = function () {
+        $mdDialog.hide($scope.deposito);
     };
 }

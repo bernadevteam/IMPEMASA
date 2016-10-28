@@ -2,7 +2,7 @@
     <form name="frmVenta" ng-cloak>
         <md-toolbar class="ng-class:{'md-warn md-hue-2' : venta.pagoPendiente}">
             <div class="md-toolbar-tools">
-                <h2>Venta </h2>
+                <h2>{{venta.id ? 'Modificar' : 'Agregar'}} venta </h2>
                 <span flex></span>
                 {{venta.pagoPendiente ? 'Pago pendiente' : 'Saldada'}}
                 <md-button class="md-icon-button" ng-click="cerrar()">
@@ -35,7 +35,7 @@
                         </md-select>
                     </md-input-container>
                 </div>
-                <div layout-gt-sm="row" class="md-block" flex-gt-sm>
+                <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Factura No.</label>
                         <input ng-model="venta.noFactura" ng-required="true" type="number">
