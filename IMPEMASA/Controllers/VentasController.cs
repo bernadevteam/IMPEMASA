@@ -27,7 +27,7 @@ namespace IMPEMASA.Controllers
         [HttpGet]
         public IEnumerable<object> VentasPendientes()
         {
-            return db.Ventas.ToList().Select(v => ConvertirVenta(v));
+            return db.Ventas.OrderByDescending(v => v.Fecha).OrderByDescending(v => v.PagoPendiente).Take(100).ToList().Select(v => ConvertirVenta(v));
         }
 
         // PUT: api/Ventas/5
@@ -113,7 +113,7 @@ namespace IMPEMASA.Controllers
 
         private object ConvertirVenta(Ventas v)
         {
-            return new
+            return new Models.VentaModel()
             {
                 Id = v.Id,
                 IdVentaTipo = v.IdVentaTipo,
@@ -122,13 +122,13 @@ namespace IMPEMASA.Controllers
                 FechaVencimiento = v.Fecha.AddMonths(1).AddDays(1).ToString("MM/dd/yyyy"),
                 ITBIS = v.ITBIS,
                 NoFactura = v.NoFactura,
-                PagoPendiente = v.PagoPendiente,
+                PagoPendiente = v.PagoPendiente ?? true,
                 RNC = v.RNC,
                 SubTotal = v.SubTotal,
                 Total = v.Total,
                 Cliente = v.Clientes.Nombre,
                 Tipo = v.VentaTipos.Nombre,
-                Depositos = v.Depositos.Select(d => new {
+                Depositos = v.Depositos.Select(d => new Models.DepositoModel(){
                     Id = d.Id,
                     IdCuenta = d.IdCuenta,
                     IdDepositoTipo = d.IdDepositoTipo,
@@ -138,13 +138,13 @@ namespace IMPEMASA.Controllers
                     Tipo = d.DepositoTipos.Nombre,
                     Monto = d.Monto,
                     Fecha = d.Fecha.ToString("MM/dd/yyyy")
-                })
+                }).ToArray()
             };
         }
 
         private object ConvertirVentaPut(Ventas v)
         {
-            return new
+            return new Models.VentaModel()
             {
                 Id = v.Id,
                 IdVentaTipo = v.IdVentaTipo,
@@ -153,7 +153,7 @@ namespace IMPEMASA.Controllers
                 FechaVencimiento = v.Fecha.AddMonths(1).AddDays(1).ToString("MM/dd/yyyy"),
                 ITBIS = v.ITBIS,
                 NoFactura = v.NoFactura,
-                PagoPendiente = v.PagoPendiente,
+                PagoPendiente = v.PagoPendiente ?? true,
                 RNC = v.RNC,
                 SubTotal = v.SubTotal,
                 Total = v.Total,

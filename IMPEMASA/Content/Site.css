@@ -9,4 +9,17 @@
 md-card > md-card-header > md-card-avatar > i.material-icons{
     font-size:45px;
     cursor:pointer;
-} 
+}
+ .imprimir{
+        display:none;
+    }
+
+@media print {
+    .ocultar-impresion, md-button, md-toolbar, md-tabs, md-dialog, md-backdrop {
+        display:none;
+    }
+
+    .imprimir{
+        display:block;
+    }
+}

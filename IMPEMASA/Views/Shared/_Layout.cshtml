@@ -21,6 +21,7 @@
             </md-select>
             <md-progress-circular md-mode="indeterminate" class="md-accent md-hue-2" md-diameter="30" ng-show="activarProgreso"></md-progress-circular>
             <span flex></span>
+            @User.Identity.Name
             <md-button class="md-fab md-mini" aria-label="Agregar" ng-click="agregar($event);" ng-show="moduloAct">
                 <md-icon class="material-icons">&#xE145;</md-icon>
             </md-button>

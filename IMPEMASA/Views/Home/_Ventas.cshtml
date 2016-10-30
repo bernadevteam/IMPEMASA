@@ -1,77 +1,59 @@
-﻿        <md-tabs md-dynamic-height>
-            <md-tab label="Pendientes" md-dynamic-height>
-                <md-content class="md-padding" layout="row" layout-wrap ng-controller="VentasController">
-                    <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas">
-                        <md-card>
-                            <md-card-header>
-                                <md-card-avatar>
-                                    <i class="material-icons" ng-click="verEstadoCuenta($event,venta.idCliente)">&#xE88F;</i>
-                                </md-card-avatar>
-                                <md-card-header-text>
-                                    <span class="md-headline">{{venta.cliente}}</span>
-                                    <span class="md-subhead">RNC: {{venta.rnc}}. Vence {{venta.fechaVencimiento}} </span>
-                                </md-card-header-text>
-                            </md-card-header>
-                            <md-card-content>
-                                <md-toolbar layout="row" class="md-hue-3">
-                                    <div class="md-toolbar-tools">
-                                        <span>Fact. #{{venta.noFactura}} - {{venta.tipo}}</span>
-                                        <span flex></span>
-                                        <md-button class="md-mini md-n md-icon-button md-accent" aria-label="Modificar" ng-click="editar($event, venta);" md-no-ink>
-                                            <md-icon class="material-icons">&#xE254;</md-icon>
-                                        </md-button>
-                                    </div>
-                                </md-toolbar>
+﻿<md-tabs md-dynamic-height>
+    <md-tab label="Pendientes" md-dynamic-height>
+        <md-content class="md-padding" layout="row" layout-wrap>
+            <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas | filter:{pagoPendiente:true}">
+                <tarjeta-venta></tarjeta-venta>
+            </div>
+        </md-content>
+    </md-tab>
+    <md-tab label="B&uacute;squeda">
+        <md-content class="md-padding" layout="row" layout-wrap>
+            <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas">
+                <tarjeta-venta></tarjeta-venta>
+            </div>
+        </md-content>
 
-                                <md-list flex>
-                                    <md-list-item>
-                                        Monto
-                                        <span flex></span>
-                                        {{venta.total | currency:"RD$"}}
-                                    </md-list-item>
-                                    <md-divider></md-divider>
-                                    {{totalDep = totalDepositos(venta.depositos);""}}
-                                    {{venta.totalPendiente = venta.total - totalDep;""}}
-                                    <md-menu>
-                                        <md-toolbar layout="row" class="md-hue-3">
-                                            <div class="md-toolbar-tools">
-                                                <span>Depositos</span>
-                                                <span flex></span>
-                                                <md-button ng-show="venta.depositos.length > 0" class="md-icon-button md-accent" ng-click="$mdOpenMenu($event)" md-no-ink>
-                                                    <md-icon class="material-icons">&#xE896;</md-icon>
-                                                </md-button>
-                                                <md-button ng-show="totalDep < venta.total" class="md-icon-button md-accent" aria-label="Agregar deposito" ng-click="editarDeposito($event, venta);" md-no-ink>
-                                                    <md-icon class="material-icons">&#xE227;</md-icon>
-                                                </md-button>
-                                            </div>
-                                        </md-toolbar>
-                                        <md-menu-content width="6">
-                                            <md-menu-item ng-repeat="deposito in venta.depositos">
-                                                <md-button ng-click="editarDeposito($event, venta, deposito);">
-                                                    [{{deposito.banco}}] {{deposito.cuenta}}
-                                                    <span flex></span>
-                                                    {{deposito.monto | currency:"RD$"}}
-                                                </md-button>
-                                            </md-menu-item>
-                                        </md-menu-content>
-                                    </md-menu>
-                                    <md-divider></md-divider>
-                                    <md-list-item>
-                                        Total
-                                        <span flex></span>
-                                        {{totalDep | currency:"RD$"}}
-                                    </md-list-item>
-                                    <md-divider></md-divider>
-                                    <md-list-item>
-                                        Pendiente
-                                        <span flex></span>
-                                        {{venta.total - totalDep| currency:"RD$"}}
-                                </md-list>
-
-                            </md-card-content>
-                        </md-card>
-                    </div>
-                </md-content>
-            </md-tab>
-            <md-tab label="B&uacute;squeda"></md-tab>
-        </md-tabs>
+    </md-tab>
+</md-tabs>
+<div class="imprimir" ng-show="estadoCuenta">
+    <div>
+        <div layout="column" layout-align="center center">
+            <img src="~/Content/img/logo.jpg" />
+            <h1 class="md-display-1">Estado de cuenta</h1>
+        </div>
+        <md-divider></md-divider>
+        <h1 class="md-title">{{estadoCuenta.cliente.nombre}}</h1>
+        <h3 class="md-subhead">{{estadoCuenta.cliente.direccion}}</h3>
+        <h3 class="md-subhead">{{estadoCuenta.cliente.telefono}}</h3>
+        <md-divider></md-divider>
+        <md-list>
+            <md-list-item>
+                <div layout="row" flex>
+                    <div flex="20">Factura</div>
+                    <div flex="20">Fecha</div>
+                    <div flex="20">Vencimiento</div>
+                    <div flex="40" layout="row" layout-align="end start">Monto</div>
+                </div>
+            </md-list-item>
+            {{total = 0.0;""}}
+            <md-divider></md-divider>
+            <md-list-item ng-repeat="venta in estadoCuenta.pendientes">
+                <div layout="row" flex>
+                    <div flex="20">{{venta.noFactura}}</div>
+                    <div flex="20">{{venta.fecha}}</div>
+                    <div flex="20">{{venta.fechaVencimiento}}</div>
+                    <div flex="40" layout="row" layout-align="end start">{{venta.totalPendiente | currency:"RD$"}}</div>
+                </div>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item>
+                <div layout="row" flex>
+                    {{s = estadoCuenta.pendientes.length == 1 ? '' : 's';""}}
+                    <strong>{{estadoCuenta.pendientes.length}} factura{{s}} pendiente{{s}}</strong>
+                    <span flex></span>
+                    <strong> {{estadoCuenta.totalPendiente | currency:"RD$"}}</strong>
+                </div>
+            </md-list-item>
+        </md-list>
+    </div>
+</div>
