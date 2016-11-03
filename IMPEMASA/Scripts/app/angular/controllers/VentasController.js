@@ -2,7 +2,7 @@
       .directive('tarjetaVenta', function () {
           return {
               restrict: 'E',
-              templateUrl: 'Plantillas/TarjetaVenta.html?V1.0'
+              templateUrl: 'Plantillas/TarjetaVenta.html?V1.2'
           }
       })
 .controller('VentasController', function ($scope, $filter, $mdSidenav, $mdDialog, $http, $mdToast) {
@@ -32,8 +32,29 @@
         });
     });
 
+    $scope.eliminarVenta = function (ev, venta) {
+        var confirm = $mdDialog.confirm()
+                 .title('Deseas eliminar esta venta?')
+                 .textContent('Todos los depositos relacionados también se eliminarán.')
+                 .targetEvent(ev)
+                 .ok('Adelante!')
+                 .cancel('Mejor no');
+
+        $mdDialog.show(confirm)
+.then(function () {
+    $http.delete(urlventa + '?id=' + venta.id).then(function () {
+        var i = $scope.ventas.indexOf(venta);
+        $scope.ventas.splice(i, 1);
+        toast('Venta eliminada con exito!');
+    }, function () {
+        toast('No se pudo eliminar la venta. Intente mas tarde o contacte al administrador.');
+    });
+});
+
+    };
+
     $scope.verEstadoCuenta = function (ev, idCliente) {
-        var pendientes = $filter('filter')($scope.ventas, { idCliente: idCliente, pagoPendiente : true });
+        var pendientes = $filter('filter')($scope.ventas, { idCliente: idCliente, pagoPendiente: true });
         var estadoCliente = $filter('filter')(clientes, { id: idCliente })[0];
 
         var sumaPendientes = 0.0;
@@ -61,8 +82,10 @@
     $scope.totalDepositos = function (depositos) {
         var total = 0.0;
 
-        for (var i = 0; i < depositos.length; i++) {
-            total += depositos[i].monto;
+        if (depositos) {
+            for (var i = 0; i < depositos.length; i++) {
+                total += depositos[i].monto;
+            }
         }
 
         return total;
@@ -75,7 +98,7 @@
         $mdDialog.show({
             locals: { modelo: ctaPivot, clientes: clientes, tipoventas: tiposVentas },
             controller: DialogVentaController,
-            templateUrl: 'Plantillas/FormVenta.html',
+            templateUrl: 'Plantillas/FormVenta.html?V1.1',
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose: false
@@ -85,20 +108,12 @@
          if (venta.id != null) {
              $http.put(urlventa, venta).then(function (res) {
                  angular.merge(ventaSel, res.data);
-                 $mdToast.show($mdToast.simple()
-        .textContent('Modificado con exito!')
-        .position('top right')
-        .hideDelay(3000)
-    );
+                 toast('Modificado con exito!');
              });
          } else {
              $http.post(urlventa, venta).then(function (res) {
                  $scope.ventas.push(res.data);
-                 $mdToast.show($mdToast.simple()
-        .textContent('Creado con exito!')
-        .position('top right')
-        .hideDelay(3000)
-    );
+                 toast('Creado con exito!');
              });
          }
      }).finally(function () {
@@ -133,28 +148,27 @@
          if (deposito.id != null) {
              $http.put(urldeposito, deposito).then(function (res) {
                  angular.merge(depSel, res.data);
-                 $mdToast.show($mdToast.simple()
-        .textContent('Modificado con exito!')
-        .position('top right')
-        .hideDelay(3000)
-    );
+                 toast('Modificado con exito!');
              });
          } else {
              $http.post(urldeposito, deposito).then(function (res) {
                  venta.depositos.push(res.data);
-                 $mdToast.show($mdToast.simple()
-        .textContent('Creado con exito!')
-        .position('top right')
-        .hideDelay(3000)
-    );
+                 toast('Creado con exito!');
              });
          }
      });
     };
 
-
     $scope.editar = manejoventa;
     $scope.editarDeposito = manejodeposito
+
+    function toast(msg) {
+        $mdToast.show($mdToast.simple()
+     .textContent(msg)
+     .position('bottom right')
+     .hideDelay(5000)
+ );
+    }
 
 });
 
@@ -180,7 +194,8 @@ function DialogVentaController($scope, $mdDialog, $http, $filter, modelo, client
 
     $scope.calcular = function () {
         var st = $scope.venta.subTotal;
-        var itbis = 0.18;
+        var itbis = $scope.venta.idVentaTipo == 3 ? 0.0 : 0.18;
+
         if (isNaN(st)) {
             $scope.venta.itbis = 0.0;
             $scope.venta.total = 0.0;

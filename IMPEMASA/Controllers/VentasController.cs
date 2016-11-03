@@ -27,7 +27,13 @@ namespace IMPEMASA.Controllers
         [HttpGet]
         public IEnumerable<object> VentasPendientes()
         {
-            return db.Ventas.OrderByDescending(v => v.Fecha).OrderByDescending(v => v.PagoPendiente).Take(100).ToList().Select(v => ConvertirVenta(v));
+            return db.Ventas.OrderByDescending(v => v.Fecha).Take(100).ToList().Select(v => ConvertirVenta(v));
+        }
+
+        [HttpGet]
+        public bool ExisteFactura(int factura)
+        {
+            return db.Ventas.Where(v => v.NoFactura.Equals(factura)).ToArray().Length > 0;
         }
 
         // PUT: api/Ventas/5
@@ -67,7 +73,7 @@ namespace IMPEMASA.Controllers
         [ResponseType(typeof(Ventas))]
         public IHttpActionResult PostVentas(Ventas ventas)
         {
-                if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -128,7 +134,8 @@ namespace IMPEMASA.Controllers
                 Total = v.Total,
                 Cliente = v.Clientes.Nombre,
                 Tipo = v.VentaTipos.Nombre,
-                Depositos = v.Depositos.Select(d => new Models.DepositoModel(){
+                Depositos = v.Depositos.Select(d => new Models.DepositoModel()
+                {
                     Id = d.Id,
                     IdCuenta = d.IdCuenta,
                     IdDepositoTipo = d.IdDepositoTipo,

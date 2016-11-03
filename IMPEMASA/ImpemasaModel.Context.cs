@@ -32,5 +32,6 @@ namespace IMPEMASA
         public virtual DbSet<Clientes> Clientes { get; set; }
         public virtual DbSet<Ventas> Ventas { get; set; }
         public virtual DbSet<Depositos> Depositos { get; set; }
+        public virtual DbSet<Autorizados> Autorizados { get; set; }
     }
 }

@@ -28,7 +28,7 @@
                     </md-input-container>
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Tipo</label>
-                        <md-select ng-model="venta.idVentaTipo" ng-required="true">
+                        <md-select ng-model="venta.idVentaTipo" ng-required="true" ng-change="calcular()">
                             <md-option ng-repeat="tipo in tiposVenta" ng-value="tipo.id">
                                 {{tipo.nombre}}
                             </md-option>
@@ -38,7 +38,11 @@
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Factura No.</label>
-                        <input ng-model="venta.noFactura" ng-required="true" type="number">
+                        <input ng-model="venta.noFactura" name="NoFactura" ng-required="true" type="number" ng-minlength="4" ng-unique>
+                        <div ng-messages="frmVenta.NoFactura.$error" role="alert">
+                            <div ng-message="minlength">Al menos cuatro dígitos</div>
+                            <div ng-message="unique">Esta factura ya existe</div>
+                        </div>
                     </md-input-container>
                    <div>
                        <md-input-container>

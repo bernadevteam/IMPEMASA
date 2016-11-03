@@ -1,7 +1,7 @@
 ﻿angular.module('impemasapp')
 .controller('NavegacionController', function ($scope, $http, $mdSidenav, $document) {
     $scope.activarProgreso = false;
-    $scope.modulos = ['Cuentas', 'Clientes', 'Ventas'];
+    $scope.modulos = ['Cuentas', 'Clientes', 'Ventas', 'Reportes'];
     $scope.moduloAct = 'Ventas';
 
     $scope.contactandoServidor = function () {

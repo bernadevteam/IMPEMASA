@@ -6,26 +6,33 @@
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/Content/angular-material.min.css" rel="stylesheet" />
-    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/Site.css?V1.1" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet" />
 </head>
 <body ng-app="impemasapp" layout="column" ng-controller="NavegacionController" ng-cloak>
     <md-toolbar>
+        @if (!string.IsNullOrEmpty(User.Identity.Name))
+        {
+            <div class="md-toolbar-tools">
+                <h2>IMPEMASA <md-icon class="material-icons" ng-show="moduloAct">&#xE5CC;</md-icon></h2>
+                <md-select ng-model="moduloAct" class="md-no-underline md-warm md-hue-2">
+                    <md-option ng-repeat="modulo in modulos" ng-value="modulo">{{modulo}}</md-option>
+                </md-select>
+                <input class="input-search" ng-model="navFiltro" placeholder="Buscar" flex="50" ng-show="moduloAct == 'Ventas'" />
+                <span flex></span>
+                <md-progress-circular md-mode="indeterminate" class="md-accent md-hue-2" md-diameter="30" ng-show="activarProgreso"></md-progress-circular>
 
-        <div class="md-toolbar-tools">
-            <h2>IMPEMASA <md-icon class="material-icons" ng-show="moduloAct">&#xE5CC;</md-icon></h2>
-            <md-select ng-model="moduloAct" class="md-no-underline md-warm md-hue-2">
-                <md-option ng-repeat="modulo in modulos" ng-value="modulo">{{modulo}}</md-option>
-            </md-select>
-            <md-progress-circular md-mode="indeterminate" class="md-accent md-hue-2" md-diameter="30" ng-show="activarProgreso"></md-progress-circular>
-            <span flex></span>
-            @User.Identity.Name
-            <md-button class="md-fab md-mini" aria-label="Agregar" ng-click="agregar($event);" ng-show="moduloAct">
-                <md-icon class="material-icons">&#xE145;</md-icon>
-            </md-button>
-        </div>
+                @User.Identity.Name
+                <md-button class="md-fab md-mini" aria-label="Agregar" ng-click="agregar($event);" ng-show="moduloAct">
+                    <md-icon class="material-icons">&#xE145;</md-icon>
+                </md-button>
+            </div>
+        }else
+        {
+            <h2> IMPEMASA</h2>
+        }
     </md-toolbar>
 
     <div class="container" layout="row" flex>
@@ -43,8 +50,8 @@
     <script src="~/Scripts/angular-aria/angular-aria.min.js"></script>
     <script src="~/Scripts/angular-messages.min.js"></script>
     <script src="~/Scripts/angular-material/angular-material.min.js"></script>
-    <script src="~/Scripts/app/angular/app.js"></script>
-    <script src="~/Scripts/app/angular/controllers/NavegacionController.js"></script>
+    <script src="~/Scripts/app/angular/app.js?V1.0"></script>
+    <script src="~/Scripts/app/angular/controllers/NavegacionController.js?V1.0"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

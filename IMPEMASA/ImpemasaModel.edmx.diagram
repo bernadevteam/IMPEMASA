@@ -18,6 +18,7 @@
         <AssociationConnector Association="IMPEMASAModel.FK_Depositos_Cuentas" />
         <AssociationConnector Association="IMPEMASAModel.FK_Depositos_DepositoTipos" />
         <AssociationConnector Association="IMPEMASAModel.FK_Depositos_Ventas" />
+        <EntityTypeShape EntityType="IMPEMASAModel.Autorizados" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

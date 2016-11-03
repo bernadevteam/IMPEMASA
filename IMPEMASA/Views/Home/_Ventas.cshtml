@@ -1,22 +1,22 @@
 ﻿<md-tabs md-dynamic-height>
     <md-tab label="Pendientes" md-dynamic-height>
         <md-content class="md-padding" layout="row" layout-wrap>
-            <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas | filter:{pagoPendiente:true}">
+            <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas | filter:{pagoPendiente:true, cliente:navFiltro}">
                 <tarjeta-venta></tarjeta-venta>
             </div>
         </md-content>
     </md-tab>
-    <md-tab label="B&uacute;squeda">
+    <md-tab label="Todas">
         <md-content class="md-padding" layout="row" layout-wrap>
-            <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas">
+            <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas | filter:{cliente:navFiltro}">
                 <tarjeta-venta></tarjeta-venta>
             </div>
         </md-content>
 
     </md-tab>
 </md-tabs>
-<div class="imprimir" ng-show="estadoCuenta">
-    <div>
+<div class="imprimir">
+    <div  ng-show="estadoCuenta">
         <div layout="column" layout-align="center center">
             <img src="~/Content/img/logo.jpg" />
             <h1 class="md-display-1">Estado de cuenta</h1>

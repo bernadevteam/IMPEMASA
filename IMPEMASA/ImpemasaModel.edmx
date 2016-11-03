@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="IMPEMASAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Autorizados">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AppId" Type="int" Nullable="false" />
+          <Property Name="Correo" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Rol" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Bancos">
           <Key>
             <PropertyRef Name="Id" />
@@ -148,6 +157,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="IMPEMASAModelStoreContainer">
+          <EntitySet Name="Autorizados" EntityType="Self.Autorizados" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bancos" EntityType="Self.Bancos" Schema="IMPEMASA" store:Type="Tables" />
           <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="IMPEMASA" store:Type="Tables" />
           <EntitySet Name="Cuentas" EntityType="Self.Cuentas" Schema="IMPEMASA" store:Type="Tables" />
@@ -265,6 +275,7 @@
             <End Role="Ventas" EntitySet="Ventas" />
             <End Role="Depositos" EntitySet="Depositos" />
           </AssociationSet>
+          <EntitySet Name="Autorizados" EntityType="IMPEMASAModel.Autorizados" />
         </EntityContainer>
         <EntityType Name="Clientes">
           <Key>
@@ -371,6 +382,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Autorizados">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AppId" Type="Int32" Nullable="false" />
+          <Property Name="Correo" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Rol" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -450,6 +470,16 @@
                 <ScalarProperty Name="IdCuenta" ColumnName="IdCuenta" />
                 <ScalarProperty Name="IdDepositoTipo" ColumnName="IdDepositoTipo" />
                 <ScalarProperty Name="IdVenta" ColumnName="IdVenta" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Autorizados">
+            <EntityTypeMapping TypeName="IMPEMASAModel.Autorizados">
+              <MappingFragment StoreEntitySet="Autorizados">
+                <ScalarProperty Name="Rol" ColumnName="Rol" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="AppId" ColumnName="AppId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
