@@ -12,6 +12,8 @@ namespace IMPEMASA
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class IMPEMASAEntities : DbContext
     {
@@ -33,5 +35,10 @@ namespace IMPEMASA
         public virtual DbSet<Ventas> Ventas { get; set; }
         public virtual DbSet<Depositos> Depositos { get; set; }
         public virtual DbSet<Autorizados> Autorizados { get; set; }
+    
+        public virtual ObjectResult<ReporteBalanceAntiguedad_Result> ReporteBalanceAntiguedad()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReporteBalanceAntiguedad_Result>("ReporteBalanceAntiguedad");
+        }
     }
 }

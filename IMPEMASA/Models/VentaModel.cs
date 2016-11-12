@@ -12,6 +12,7 @@ namespace IMPEMASA.Models
         public int IdVentaTipo { get; set; }
         public int IdCliente { get; set; }
         public int NoFactura { get; set; }
+        public int DiasPendientes { get; set; }
         public bool PagoPendiente { get; set; }
         public decimal ITBIS { get; set; }
         public decimal SubTotal { get; set; }

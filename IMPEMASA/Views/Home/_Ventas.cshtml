@@ -1,7 +1,7 @@
 ﻿<md-tabs md-dynamic-height>
     <md-tab label="Pendientes" md-dynamic-height>
         <md-content class="md-padding" layout="row" layout-wrap>
-            <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas | filter:{pagoPendiente:true, cliente:navFiltro}">
+            <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas | ventaspendientes : navDias | filter:{cliente:navFiltro}">
                 <tarjeta-venta></tarjeta-venta>
             </div>
         </md-content>
@@ -16,7 +16,7 @@
     </md-tab>
 </md-tabs>
 <div class="imprimir">
-    <div  ng-show="estadoCuenta">
+    <div ng-show="estadoCuenta">
         <div layout="column" layout-align="center center">
             <img src="~/Content/img/logo.jpg" />
             <h1 class="md-display-1">Estado de cuenta</h1>

@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <title>IMPEMASA Web</title>
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/favicon.png" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/Content/angular-material.min.css" rel="stylesheet" />
-    <link href="~/Content/Site.css?V1.1" rel="stylesheet" />
+    <link href="~/Content/Site.css?V1.2" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet" />
@@ -20,7 +20,13 @@
                 <md-select ng-model="moduloAct" class="md-no-underline md-warm md-hue-2">
                     <md-option ng-repeat="modulo in modulos" ng-value="modulo">{{modulo}}</md-option>
                 </md-select>
-                <input class="input-search" ng-model="navFiltro" placeholder="Buscar" flex="50" ng-show="moduloAct == 'Ventas'" />
+                <input class="input-search" ng-model="navFiltro" placeholder="Buscar" flex="40" ng-show="moduloAct == 'Ventas'" />
+                <md-select ng-model="navDias" class="md-no-underline md-warm md-hue-2" ng-show="moduloAct == 'Ventas'">
+                    <md-option value="30" selected>0 a 30 días</md-option>
+                    <md-option value="61">31 a 60 días</md-option>
+                    <md-option value="91">61 a 90 días</md-option>
+                    <md-option value="121">Mas de 91 días</md-option>
+                </md-select>
                 <span flex></span>
                 <md-progress-circular md-mode="indeterminate" class="md-accent md-hue-2" md-diameter="30" ng-show="activarProgreso"></md-progress-circular>
 
@@ -51,7 +57,7 @@
     <script src="~/Scripts/angular-messages.min.js"></script>
     <script src="~/Scripts/angular-material/angular-material.min.js"></script>
     <script src="~/Scripts/app/angular/app.js?V1.0"></script>
-    <script src="~/Scripts/app/angular/controllers/NavegacionController.js?V1.0"></script>
+    <script src="~/Scripts/app/angular/controllers/NavegacionController.js?V1.1"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

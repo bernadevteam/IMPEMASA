@@ -17,12 +17,12 @@ namespace IMPEMASA.Controllers
             return View();
         }
 
-        public FileResult DescargarReporte(char reporte, int mes, int? anio)
+        public FileResult DescargarReporte(char reporte, int? mes, int? anio)
         {
             var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
             var fileStream = new MemoryStream();
-            ObtenerReporte(reporte, mes, anio ?? DateTime.Now.Year).SaveAs(fileStream);
+            ObtenerReporte(reporte, mes ?? DateTime.Now.Month, anio ?? DateTime.Now.Year).SaveAs(fileStream);
             fileStream.Position = 0;
 
             var fsr = new FileStreamResult(fileStream, contentType);
@@ -34,8 +34,11 @@ namespace IMPEMASA.Controllers
                 case 'V':
                     reporteNam = "Ventas";
                     break;
+                case 'A':
+                    reporteNam = "Antiguedad";
+                    break;
             }
-            fsr.FileDownloadName = string.Format("{0}_{1}{2}.xlsx", reporteNam,mes,anio ?? DateTime.Now.Year);
+            fsr.FileDownloadName = string.Format("{0}_{1}.xlsx", reporteNam,DateTime.Now.ToString("MM_dd_yyyy"));
 
             return fsr;
         }
@@ -50,6 +53,9 @@ namespace IMPEMASA.Controllers
                     break;
                 case 'D':
                     pkg = LlenarDepositos(mes, anio);
+                    break;
+                case 'A':
+                    pkg = LlenarAntiguedad();
                     break;
             }
 
@@ -124,11 +130,6 @@ namespace IMPEMASA.Controllers
             int filaTipo3 = initFila;
             int filaTipo4 = initFila;
 
-            var ventas = db.Ventas.Include(cl => cl.Clientes)
-                .Include(vt => vt.Depositos)
-                .OrderByDescending(f => f.Fecha)
-                .Where(v => v.Depositos.Count > 0 && v.Fecha.Month.Equals(mes) && v.Fecha.Year.Equals(anio)).ToArray();
-
             var libTotal = wkbk.Worksheets[1];
             System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("es-ES");
             var depositos = db.Depositos
@@ -181,6 +182,27 @@ namespace IMPEMASA.Controllers
             return package;
         }
 
+        private ExcelPackage LlenarAntiguedad()
+        {
+            var package = new ExcelPackage(new FileInfo(Server.MapPath(@"~/Archivos/ANTIGUEDAD.xlsx")));
+            var wkbk = package.Workbook;
+            IMPEMASAEntities db = new IMPEMASAEntities();
+            int initFila = 8;
+
+            var libTotal = wkbk.Worksheets[1];
+            System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("es-ES");
+
+            libTotal.Cells[1, 1].Value = string.Format("SALDO DE ANTIGUEDAD POR CLIENTES AL {0}", DateTime.Today.ToShortDateString());
+
+            foreach (var antiguedad in db.ReporteBalanceAntiguedad())
+            {
+                AsignarSaldoPendienteCelda(libTotal, initFila, antiguedad);
+                initFila++;
+            }
+
+            return package;
+        }
+
         private void AsignarVentaCelda(ExcelWorksheet ws, int filaNum, Ventas venta, bool mostrarTipo = true)
         {
 
@@ -208,6 +230,16 @@ namespace IMPEMASA.Controllers
             ws.Cells[filaNum, 6].Value = deposito.Monto;
         }
 
+        private void AsignarSaldoPendienteCelda(ExcelWorksheet ws, int filaNum, ReporteBalanceAntiguedad_Result antiguedad)
+        {
+            ws.Cells[filaNum, 1].Value = antiguedad.Cliente;
+            ws.Cells[filaNum, 2].Value = antiguedad.Telefono;
+            ws.Cells[filaNum, 3].Value = string.Format("RD{0:c}", antiguedad.Balance);
+            ws.Cells[filaNum, 4].Value = string.Format("RD{0:c}", antiguedad.Treinta);
+            ws.Cells[filaNum, 5].Value = string.Format("RD{0:c}", antiguedad.Sesenta);
+            ws.Cells[filaNum, 6].Value = string.Format("RD{0:c}", antiguedad.Noventa);
+            ws.Cells[filaNum, 7].Value = string.Format("RD{0:c}", antiguedad.CientoVeinte);
+        }
 
 
     }

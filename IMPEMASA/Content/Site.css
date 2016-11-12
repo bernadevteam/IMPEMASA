@@ -5,7 +5,9 @@
 #content{
     padding:15px;
 }
-
+.md-toolbar-tools md-select{
+    padding:0 15px;
+}
 md-card > md-card-header > md-card-avatar > i.material-icons{
     font-size:45px;
     cursor:pointer;

@@ -156,6 +156,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="ReporteBalanceAntiguedad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="IMPEMASA" />
         <EntityContainer Name="IMPEMASAModelStoreContainer">
           <EntitySet Name="Autorizados" EntityType="Self.Autorizados" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bancos" EntityType="Self.Bancos" Schema="IMPEMASA" store:Type="Tables" />
@@ -276,6 +277,7 @@
             <End Role="Depositos" EntitySet="Depositos" />
           </AssociationSet>
           <EntitySet Name="Autorizados" EntityType="IMPEMASAModel.Autorizados" />
+          <FunctionImport Name="ReporteBalanceAntiguedad" ReturnType="Collection(IMPEMASAModel.ReporteBalanceAntiguedad_Result)" />
         </EntityContainer>
         <EntityType Name="Clientes">
           <Key>
@@ -391,6 +393,15 @@
           <Property Name="Correo" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="Rol" Type="Int32" Nullable="false" />
         </EntityType>
+        <ComplexType Name="ReporteBalanceAntiguedad_Result">
+          <Property Type="String" Name="Cliente" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="Telefono" Nullable="false" MaxLength="12" />
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Treinta" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Sesenta" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Noventa" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="CientoVeinte" Nullable="true" Precision="19" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -484,6 +495,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ReporteBalanceAntiguedad" FunctionName="IMPEMASAModel.Store.ReporteBalanceAntiguedad" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMPEMASAModel.ReporteBalanceAntiguedad_Result">
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Treinta" ColumnName="Treinta" />
+                <ScalarProperty Name="Sesenta" ColumnName="Sesenta" />
+                <ScalarProperty Name="Noventa" ColumnName="Noventa" />
+                <ScalarProperty Name="CientoVeinte" ColumnName="CientoVeinte" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

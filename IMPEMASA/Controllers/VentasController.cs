@@ -119,7 +119,7 @@ namespace IMPEMASA.Controllers
 
         private object ConvertirVenta(Ventas v)
         {
-            return new Models.VentaModel()
+            var venta = new Models.VentaModel()
             {
                 Id = v.Id,
                 IdVentaTipo = v.IdVentaTipo,
@@ -147,11 +147,18 @@ namespace IMPEMASA.Controllers
                     Fecha = d.Fecha.ToString("MM/dd/yyyy")
                 }).ToArray()
             };
+
+            if (venta.PagoPendiente)
+            {
+                venta.DiasPendientes = (DateTime.Now - v.Fecha).Days;
+            }
+
+            return venta;
         }
 
         private object ConvertirVentaPut(Ventas v)
         {
-            return new Models.VentaModel()
+            var venta = new Models.VentaModel()
             {
                 Id = v.Id,
                 IdVentaTipo = v.IdVentaTipo,
@@ -167,6 +174,13 @@ namespace IMPEMASA.Controllers
                 Cliente = v.Clientes.Nombre,
                 Tipo = v.VentaTipos.Nombre
             };
+
+            if (venta.PagoPendiente)
+            {
+                venta.DiasPendientes = (DateTime.Now - v.Fecha).Days;
+            }
+
+            return venta;
         }
 
     }

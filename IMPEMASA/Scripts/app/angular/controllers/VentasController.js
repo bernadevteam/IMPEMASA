@@ -1,4 +1,20 @@
 ﻿angular.module('impemasapp')
+    .filter('ventaspendientes', function () {
+        return function (ventas, dias) {
+            var pendientes = [];
+
+            angular.forEach(ventas, function (venta) {
+                if (venta.pagoPendiente) {
+                    var minDia = dias - 30;
+                    if (dias > 91 && venta.diasPendientes > 91 || venta.diasPendientes >= minDia && venta.diasPendientes <= dias) {
+                        pendientes.push(venta);
+                    }
+                }
+            });
+
+            return pendientes;
+        };
+    })
       .directive('tarjetaVenta', function () {
           return {
               restrict: 'E',
@@ -16,7 +32,7 @@
     var urlventa = 'api/Ventas',
         urlCuentas = 'api/Cuentas',
         urltipos = 'api/VentaTipos',
-        urldeposito = 'api/Depositos'
+        urldeposito = 'api/Depositos',
     urlDepTipos = 'api/DepositoTipos';
 
     $http.get(urlventa + '/VentasPendientes').then(function (res) {
