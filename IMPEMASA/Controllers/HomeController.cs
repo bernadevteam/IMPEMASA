@@ -209,9 +209,9 @@ namespace IMPEMASA.Controllers
             ws.Cells[filaNum, 1].Value = venta.NoFactura;
             ws.Cells[filaNum, 2].Value = venta.Fecha.ToShortDateString();
             ws.Cells[filaNum, 3].Value = venta.Clientes.Nombre;
-            ws.Cells[filaNum, 4].Value = venta.SubTotal;
-            ws.Cells[filaNum, 5].Value = venta.ITBIS;
-            ws.Cells[filaNum, 6].Value = venta.Total;
+            ws.Cells[filaNum, 4].Value = string.Format("RD{0:c}", venta.SubTotal);
+            ws.Cells[filaNum, 5].Value = string.Format("RD{0:c}", venta.ITBIS);
+            ws.Cells[filaNum, 6].Value = string.Format("RD{0:c}", venta.Total);
             ws.Cells[filaNum, 7].Value = venta.RNC;
             if (mostrarTipo)
             {
@@ -227,7 +227,7 @@ namespace IMPEMASA.Controllers
             ws.Cells[filaNum, 3].Value = venta.NoFactura;
             ws.Cells[filaNum, 4].Value = deposito.DepositoTipos.Nombre;
             ws.Cells[filaNum, 5].Value = deposito.Cuentas.Numero;
-            ws.Cells[filaNum, 6].Value = deposito.Monto;
+            ws.Cells[filaNum, 6].Value = string.Format("RD{0:c}", deposito.Monto);
         }
 
         private void AsignarSaldoPendienteCelda(ExcelWorksheet ws, int filaNum, ReporteBalanceAntiguedad_Result antiguedad)

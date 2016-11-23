@@ -1,12 +1,13 @@
 ﻿<md-tabs md-dynamic-height>
-    <md-tab label="Pendientes" md-dynamic-height>
+    {{pendientes = (ventas | filter:{pagoPendiente:true});""}}
+    <md-tab label="Pendientes ({{filtradoDias.length}}/{{pendientes.length}})" md-dynamic-height>
         <md-content class="md-padding" layout="row" layout-wrap>
-            <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas | ventaspendientes : navDias | filter:{cliente:navFiltro}">
+            <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in pendientes | ventaspendientes : navDias | filter:{cliente:navFiltro} as filtradoDias">
                 <tarjeta-venta></tarjeta-venta>
             </div>
         </md-content>
     </md-tab>
-    <md-tab label="Todas">
+    <md-tab label="Todas ({{ventas.length}})">
         <md-content class="md-padding" layout="row" layout-wrap>
             <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas | filter:{cliente:navFiltro}">
                 <tarjeta-venta></tarjeta-venta>

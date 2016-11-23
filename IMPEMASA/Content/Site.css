@@ -28,7 +28,9 @@ md-card > md-card-header > md-card-avatar > i.material-icons{
     .ocultar-impresion, md-button, md-toolbar, md-tabs, md-dialog, md-backdrop {
         display:none;
     }
-
+    md-list-item{
+        page-break-inside: avoid;
+    }
     .imprimir{
         display:block;
     }

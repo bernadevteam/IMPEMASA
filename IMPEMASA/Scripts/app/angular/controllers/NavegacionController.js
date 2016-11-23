@@ -3,6 +3,8 @@
     $scope.activarProgreso = false;
     $scope.modulos = ['Cuentas', 'Clientes', 'Ventas', 'Reportes'];
     $scope.moduloAct = 'Ventas';
+    $scope.mes = new Date().getMonth() + 1;
+    $scope.anio = new Date().getFullYear();
 
     $scope.contactandoServidor = function () {
         return $http.pendingRequests.length > 0;
@@ -19,4 +21,13 @@
     $scope.$on('CambioClientes', function (ev, data) {
         $scope.$broadcast('CambioClientesBc', data);
     });
+
+    $scope.range = function (min, max, step) {
+        step = step || 1;
+        var input = [];
+        for (var i = min; i <= max; i += step) {
+            input.push(i);
+        }
+        return input;
+    };
 });

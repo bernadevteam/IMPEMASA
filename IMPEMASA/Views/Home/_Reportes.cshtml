@@ -1,17 +1,22 @@
-﻿<md-select ng-model="mes">
-    <md-option value="1">Enero</md-option>
-    <md-option value="2">Febrero</md-option>
-    <md-option value="3">Marzo</md-option>
-    <md-option value="4">Abril</md-option>
-    <md-option value="5">Mayo</md-option>
-    <md-option value="6">Junio</md-option>
-    <md-option value="7">Julio</md-option>
-    <md-option value="8">Agosto</md-option>
-    <md-option value="9">Septiembre</md-option>
-    <md-option value="10" selected>Octubre</md-option>
-    <md-option value="11">Noviembre</md-option>
-    <md-option value="12">Diciembre</md-option>
+﻿<div layout="row">
+    <md-select ng-model="anio">
+        <md-option ng-repeat="a in range(2016,anio,1)" value="{{a}}">{{a}}</md-option>
     </md-select>
-<md-button href="@Url.Action("DescargarReporte")?reporte=V&mes={{mes}}" target="_blank">Descargar Ventas</md-button>
-<md-button href="@Url.Action("DescargarReporte")?reporte=D&mes={{mes}}" target="_blank">Descargar Depositos</md-button>
+    <md-select ng-model="mes">
+        <md-option value="1">Enero</md-option>
+        <md-option value="2">Febrero</md-option>
+        <md-option value="3">Marzo</md-option>
+        <md-option value="4">Abril</md-option>
+        <md-option value="5">Mayo</md-option>
+        <md-option value="6">Junio</md-option>
+        <md-option value="7">Julio</md-option>
+        <md-option value="8">Agosto</md-option>
+        <md-option value="9">Septiembre</md-option>
+        <md-option value="10">Octubre</md-option>
+        <md-option value="11">Noviembre</md-option>
+        <md-option value="12">Diciembre</md-option>
+    </md-select>
+</div>
+<md-button href="@Url.Action("DescargarReporte")?reporte=V&mes={{mes}}&anio={{anio}}" target="_blank">Descargar Ventas</md-button>
+<md-button href="@Url.Action("DescargarReporte")?reporte=D&mes={{mes}}&anio={{anio}}" target="_blank">Descargar Depositos</md-button>
 <md-button href="@Url.Action("DescargarReporte")?reporte=A" target="_blank">Descargar Antiguedad</md-button>

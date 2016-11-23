@@ -168,6 +168,9 @@
              });
          } else {
              $http.post(urldeposito, deposito).then(function (res) {
+                 if (venta.depositos == null) {
+                     venta.depositos = [];
+                 }
                  venta.depositos.push(res.data);
                  toast('Creado con exito!');
              });
