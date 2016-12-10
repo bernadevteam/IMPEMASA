@@ -21,7 +21,7 @@
 
                     var val = elem.val();
                     if (val.length > 3) {
-                        var ajaxConfiguration = { method: 'GET', url: 'api/Ventas/ExisteFactura?factura=' + val };
+                        var ajaxConfiguration = { method: 'GET', url: attrs.actionval + val };
                         async(ajaxConfiguration)
                             .success(function (data, status, headers, config) {
                                 ctrl.$setValidity('unique', !data);

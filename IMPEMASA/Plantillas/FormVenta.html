@@ -38,7 +38,7 @@
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Factura No.</label>
-                        <input ng-model="venta.noFactura" name="NoFactura" ng-required="true" type="number" ng-minlength="4" ng-unique>
+                        <input ng-model="venta.noFactura" name="NoFactura" ng-required="true" type="number" ng-minlength="4" ng-unique actionval='api/Ventas/ExisteFactura?factura='>
                         <div ng-messages="frmVenta.NoFactura.$error" role="alert">
                             <div ng-message="minlength">Al menos cuatro dígitos</div>
                             <div ng-message="unique">Esta factura ya existe</div>

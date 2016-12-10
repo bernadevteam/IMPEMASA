@@ -20,7 +20,7 @@
                 <md-select ng-model="moduloAct" class="md-no-underline md-warm md-hue-2">
                     <md-option ng-repeat="modulo in modulos" ng-value="modulo">{{modulo}}</md-option>
                 </md-select>
-                <input class="input-search" ng-model="navFiltro" placeholder="Buscar" flex="40" ng-show="moduloAct == 'Ventas'" />
+                <input class="input-search" ng-model="navFiltro" placeholder="Buscar" flex="40" ng-show="moduloAct == 'Ventas' || moduloAct=='Clientes'" />
                 <md-select ng-model="navDias" class="md-no-underline md-warm md-hue-2" ng-show="moduloAct == 'Ventas'">
                     <md-option value="30" selected>0 a 30 días</md-option>
                     <md-option value="61">31 a 60 días</md-option>
@@ -56,7 +56,7 @@
     <script src="~/Scripts/angular-aria/angular-aria.min.js"></script>
     <script src="~/Scripts/angular-messages.min.js"></script>
     <script src="~/Scripts/angular-material/angular-material.min.js"></script>
-    <script src="~/Scripts/app/angular/app.js?V1.0"></script>
+    <script src="~/Scripts/app/angular/app.js?V1.1"></script>
     <script src="~/Scripts/app/angular/controllers/NavegacionController.js?V1.2"></script>
     @RenderSection("Scripts", required: false)
 </body>

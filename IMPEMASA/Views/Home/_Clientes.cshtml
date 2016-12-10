@@ -1,5 +1,5 @@
 ﻿<md-list ng-controller="ClientesController">
-    <md-list-item ng-repeat="cliente in clientes">
+    <md-list-item ng-repeat="cliente in clientes | orderBy:'nombre' | filter:{nombre:navFiltro}">
         <p>{{cliente.nombre.toUpperCase()}}</p>
         <md-button class="md-mini md-n" aria-label="Menu" ng-click="editar($event, cliente);" md-no-ink>
             <md-icon class="material-icons md-accent">&#xE254;</md-icon>

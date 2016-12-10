@@ -27,7 +27,7 @@ namespace IMPEMASA.Controllers
         [HttpGet]
         public IEnumerable<object> VentasPendientes()
         {
-            return db.Ventas.OrderByDescending(v => v.Fecha).Take(100).ToList().Select(v => ConvertirVenta(v));
+            return db.Ventas.OrderByDescending(v => v.NoFactura).Take(100).ToList().Select(v => ConvertirVenta(v));
         }
 
         [HttpGet]

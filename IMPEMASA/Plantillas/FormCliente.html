@@ -15,7 +15,11 @@
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex>
                         <label>Nombre</label>
-                        <input ng-model="cliente.nombre" ng-required="true" ng-minlength="3">
+                        <input ng-model="cliente.nombre" name="nombre" ng-required="true" ng-minlength="3" ng-unique actionval='api/Clientes/Existe?nombre='>
+                        <div ng-messages="frmCliente.nombre.$error" role="alert">
+                            <div ng-message="minlength">Al menos tres letras.</div>
+                            <div ng-message="unique">Ya existe.</div>
+                        </div>
                     </md-input-container>
                 </div>
                 <div layout-gt-sm="row">

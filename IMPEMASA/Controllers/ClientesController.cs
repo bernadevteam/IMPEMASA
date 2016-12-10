@@ -20,7 +20,7 @@ namespace IMPEMASA.Controllers
         // GET: api/Clientes
         public IEnumerable<object> GetClientes()
         {
-            return db.Clientes.ToList().Select(c => ConvertirCliente(c)).AsEnumerable();
+            return db.Clientes.OrderBy(c => c.Nombre).ToList().Select(c => ConvertirCliente(c)).AsEnumerable();
         }
 
         // GET: api/Clientes/5
@@ -34,6 +34,12 @@ namespace IMPEMASA.Controllers
             }
 
             return Ok(clientes);
+        }
+
+        [HttpGet]
+        public bool Existe(string nombre)
+        {
+            return db.Clientes.Where(v => v.Nombre.Equals(nombre)).ToArray().Length > 0;
         }
 
         // PUT: api/Clientes/5

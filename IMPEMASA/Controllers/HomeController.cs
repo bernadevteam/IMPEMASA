@@ -80,7 +80,7 @@ namespace IMPEMASA.Controllers
             System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("es-ES");
             var ventas = db.Ventas.Include(cl => cl.Clientes)
                 .Include(vt => vt.VentaTipos)
-                .OrderByDescending(f => f.Fecha).Where(v => v.Fecha.Month.Equals(mes) && v.Fecha.Year.Equals(anio)).ToArray();
+                .OrderByDescending(f => f.NoFactura).Where(v => v.Fecha.Month.Equals(mes) && v.Fecha.Year.Equals(anio)).ToArray();
 
             libTotal.Cells[1, 1].Value = string.Format("Ventas del mes de {0}", ventas.FirstOrDefault().Fecha.ToString("MMMM", ci));
 
