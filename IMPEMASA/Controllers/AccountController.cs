@@ -338,13 +338,13 @@ namespace IMPEMASA.Controllers
             {
                 return RedirectToAction("Login");
             }
-
-            // Sign in the user with this external login provider if the user already has a login
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            
             IMPEMASAEntities db = new IMPEMASAEntities();
 
             if (db.Autorizados.Any(a => a.Correo.Equals(loginInfo.Email) && a.AppId.Equals(2)))
             {
+                // Sign in the user with this external login provider if the user already has a login
+                var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
                 switch (result)
                 {
                     case SignInStatus.Success:

@@ -80,7 +80,7 @@ namespace IMPEMASA.Controllers
             System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("es-ES");
             var ventas = db.Ventas.Include(cl => cl.Clientes)
                 .Include(vt => vt.VentaTipos)
-                .OrderByDescending(f => f.NoFactura).Where(v => v.Fecha.Month.Equals(mes) && v.Fecha.Year.Equals(anio)).ToArray();
+                .OrderBy(f => f.NoFactura).Where(v => v.Fecha.Month.Equals(mes) && v.Fecha.Year.Equals(anio)).ToArray();
 
             libTotal.Cells[1, 1].Value = string.Format("Ventas del mes de {0}", ventas.FirstOrDefault().Fecha.ToString("MMMM", ci));
 
@@ -205,14 +205,45 @@ namespace IMPEMASA.Controllers
 
         private void AsignarVentaCelda(ExcelWorksheet ws, int filaNum, Ventas venta, bool mostrarTipo = true)
         {
+            string prefijo, noFactura;
+            switch (venta.VentaTipos.Id)
+            {
+                case 1:
+                    prefijo = "B01";
+                    break;
+                case 2:
+                    prefijo = "B02";
+                    break;
+                case 3:
+                    prefijo = "B14";
+                    break;
+                default:
+                    prefijo = "B15";
+                    break;
+            }
 
-            ws.Cells[filaNum, 1].Value = venta.NoFactura;
-            ws.Cells[filaNum, 2].Value = venta.Fecha.ToShortDateString();
+            if(venta.Fecha.Month > 4 && venta.Fecha.Year > 2017)
+            {
+                noFactura = prefijo + venta.NoFactura.ToString().PadLeft(11 - prefijo.Length, '0');
+            }
+            else
+            {
+                noFactura = venta.NoFactura.ToString();
+            }
+
+            ws.Cells[filaNum, 1].Value = noFactura;
+            ws.Cells[filaNum, 2].Value = venta.Fecha.ToString("yyyyMMdd");
             ws.Cells[filaNum, 3].Value = venta.Clientes.Nombre;
-            ws.Cells[filaNum, 4].Value = string.Format("RD{0:c}", venta.SubTotal);
-            ws.Cells[filaNum, 5].Value = string.Format("RD{0:c}", venta.ITBIS);
-            ws.Cells[filaNum, 6].Value = string.Format("RD{0:c}", venta.Total);
+
+            ws.Cells[filaNum, 4].Value = venta.SubTotal;
+            ws.Cells[filaNum, 5].Value = venta.ITBIS;
+            ws.Cells[filaNum, 6].Value = venta.Total;
             ws.Cells[filaNum, 7].Value = venta.RNC;
+
+            ws.Cells[filaNum, 4].Style.Numberformat.Format = "$#,##0.00";
+            ws.Cells[filaNum, 5].Style.Numberformat.Format = "$#,##0.00";
+            ws.Cells[filaNum, 6].Style.Numberformat.Format = "$#,##0.00";
+
             if (mostrarTipo)
             {
                 ws.Cells[filaNum, 8].Value = venta.VentaTipos.Nombre;
@@ -222,23 +253,33 @@ namespace IMPEMASA.Controllers
         private void AsignarDepositoCelda(ExcelWorksheet ws, int filaNum, Depositos deposito)
         {
             Ventas venta = deposito.Ventas;
-            ws.Cells[filaNum, 1].Value = deposito.Fecha.ToShortDateString();
+            ws.Cells[filaNum, 1].Value = deposito.Fecha.ToString("yyyyMMdd");
             ws.Cells[filaNum, 2].Value = venta.Clientes.Nombre;
             ws.Cells[filaNum, 3].Value = venta.NoFactura;
             ws.Cells[filaNum, 4].Value = deposito.DepositoTipos.Nombre;
             ws.Cells[filaNum, 5].Value = deposito.Cuentas.Numero;
-            ws.Cells[filaNum, 6].Value = string.Format("RD{0:c}", deposito.Monto);
+            ws.Cells[filaNum, 6].Value = deposito.Monto;
+
+
+            ws.Cells[filaNum, 6].Style.Numberformat.Format = "$#,##0.00";
         }
 
         private void AsignarSaldoPendienteCelda(ExcelWorksheet ws, int filaNum, ReporteBalanceAntiguedad_Result antiguedad)
         {
             ws.Cells[filaNum, 1].Value = antiguedad.Cliente;
             ws.Cells[filaNum, 2].Value = antiguedad.Telefono;
-            ws.Cells[filaNum, 3].Value = string.Format("RD{0:c}", antiguedad.Balance);
-            ws.Cells[filaNum, 4].Value = string.Format("RD{0:c}", antiguedad.Treinta);
-            ws.Cells[filaNum, 5].Value = string.Format("RD{0:c}", antiguedad.Sesenta);
-            ws.Cells[filaNum, 6].Value = string.Format("RD{0:c}", antiguedad.Noventa);
-            ws.Cells[filaNum, 7].Value = string.Format("RD{0:c}", antiguedad.CientoVeinte);
+            ws.Cells[filaNum, 3].Value = antiguedad.Balance;
+            ws.Cells[filaNum, 4].Value = antiguedad.Treinta;
+            ws.Cells[filaNum, 5].Value = antiguedad.Sesenta;
+            ws.Cells[filaNum, 6].Value = antiguedad.Noventa;
+            ws.Cells[filaNum, 7].Value = antiguedad.CientoVeinte;
+
+
+            ws.Cells[filaNum, 3].Style.Numberformat.Format = "$#,##0.00";
+            ws.Cells[filaNum, 4].Style.Numberformat.Format = "$#,##0.00";
+            ws.Cells[filaNum, 5].Style.Numberformat.Format = "$#,##0.00";
+            ws.Cells[filaNum, 6].Style.Numberformat.Format = "$#,##0.00";
+            ws.Cells[filaNum, 7].Style.Numberformat.Format = "$#,##0.00";
         }
 
 

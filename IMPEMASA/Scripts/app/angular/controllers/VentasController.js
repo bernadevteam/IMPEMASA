@@ -1,4 +1,18 @@
 ﻿angular.module('impemasapp')
+.filter('nombreofactura', function () {
+    return function (ventas, nombrefact) {
+        var out = [];
+        if (nombrefact == undefined || nombrefact.length == 0) {
+            return ventas;
+        }
+        angular.forEach(ventas, function (venta) {
+            if (venta.cliente.toLowerCase().indexOf(nombrefact.toLowerCase()) != -1 || venta.noFactura.toString().indexOf(nombrefact) != -1) {
+                out.push(venta);
+            }
+        });
+        return out;
+    }
+})
     .filter('ventaspendientes', function () {
         return function (ventas, dias) {
             var pendientes = [];
@@ -18,7 +32,7 @@
       .directive('tarjetaVenta', function () {
           return {
               restrict: 'E',
-              templateUrl: 'Plantillas/TarjetaVenta.html?V1.2'
+              templateUrl: 'Plantillas/TarjetaVenta.html?V1.3'
           }
       })
 .controller('VentasController', function ($scope, $filter, $mdSidenav, $mdDialog, $http, $mdToast) {
@@ -70,8 +84,8 @@
     };
 
     $scope.verEstadoCuenta = function (ev, idCliente) {
-        var pendientes = $filter('filter')($scope.ventas, { idCliente: idCliente, pagoPendiente: true });
-        var estadoCliente = $filter('filter')(clientes, { id: idCliente })[0];
+        var pendientes = $filter('filter')($scope.ventas, { idCliente: idCliente, pagoPendiente: true }, true);
+        var estadoCliente = $filter('filter')(clientes, { id: idCliente },true)[0];
 
         var sumaPendientes = 0.0;
 
@@ -114,7 +128,7 @@
         $mdDialog.show({
             locals: { modelo: ctaPivot, clientes: clientes, tipoventas: tiposVentas },
             controller: DialogVentaController,
-            templateUrl: 'Plantillas/FormVenta.html?V1.1',
+            templateUrl: 'Plantillas/FormVenta.html?V1.2',
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose: false
@@ -191,7 +205,7 @@
 
 });
 
-function DialogVentaController($scope, $mdDialog, $http, $filter, modelo, clientes, tipoventas) {
+function DialogVentaController($scope, $mdDialog, $http, $filter, $timeout, modelo, clientes, tipoventas) {
     $scope.venta = modelo;
     $scope.tiposVenta = ['Cargando...'];
     $scope.cliente = {};
@@ -207,20 +221,26 @@ function DialogVentaController($scope, $mdDialog, $http, $filter, modelo, client
 
     $scope.clientes = clientes;
     if (modelo.id) {
-        $scope.cliente = $filter('filter')($scope.clientes, { id: modelo.idCliente })[0];
+        $scope.cliente = $filter('filter')($scope.clientes, { id: modelo.idCliente }, true)[0];
         $scope.fechaFactura = moment(modelo.fecha, 'MM/DD/YYYY').toDate();
     }
 
     $scope.calcular = function () {
         var st = $scope.venta.subTotal;
         var itbis = $scope.venta.idVentaTipo == 3 ? 0.0 : 0.18;
-
+       
         if (isNaN(st)) {
             $scope.venta.itbis = 0.0;
             $scope.venta.total = 0.0;
         } else {
             $scope.venta.itbis = (st * itbis).toFixed(2);
             $scope.venta.total = ((st * itbis) + st).toFixed(2);
+        }
+
+        if ($scope.venta.noFactura) {
+            $timeout(function () {
+                angular.element('#NumeroFactura').triggerHandler('blur');
+            });
         }
     };
 

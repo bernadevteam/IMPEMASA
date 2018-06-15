@@ -27,13 +27,13 @@ namespace IMPEMASA.Controllers
         [HttpGet]
         public IEnumerable<object> VentasPendientes()
         {
-            return db.Ventas.OrderByDescending(v => v.NoFactura).Take(100).ToList().Select(v => ConvertirVenta(v));
+            return db.Ventas.Where(v => v.PagoPendiente.Value ? true : DbFunctions.DiffDays(v.Fecha, DateTime.Now) <= 60).OrderByDescending(v => v.PagoPendiente).ThenByDescending(v => v.NoFactura).ToList().Select(v => ConvertirVenta(v));
         }
 
         [HttpGet]
-        public bool ExisteFactura(int factura)
+        public bool ExisteFactura(int factura, int tipoVenta)
         {
-            return db.Ventas.Where(v => v.NoFactura.Equals(factura)).ToArray().Length > 0;
+            return db.Ventas.Where(v => v.NoFactura.Equals(factura) && v.IdVentaTipo.Equals(tipoVenta)).ToArray().Length > 0;
         }
 
         // PUT: api/Ventas/5

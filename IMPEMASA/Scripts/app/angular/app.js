@@ -20,7 +20,7 @@
                 scope.$apply(function () {
 
                     var val = elem.val();
-                    if (val.length > 3) {
+                    if (val.length > 0) {
                         var ajaxConfiguration = { method: 'GET', url: attrs.actionval + val };
                         async(ajaxConfiguration)
                             .success(function (data, status, headers, config) {

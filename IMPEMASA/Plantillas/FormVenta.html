@@ -17,7 +17,7 @@
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Cliente</label>
                         <md-select ng-model="cliente" ng-required="true">
-                            <md-option ng-repeat="cliente in clientes" ng-value="cliente">
+                            <md-option ng-repeat="cliente in clientes | orderBy:'nombre'" ng-value="cliente">
                                 {{cliente.nombre}}
                             </md-option>
                         </md-select>
@@ -38,7 +38,7 @@
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Factura No.</label>
-                        <input ng-model="venta.noFactura" name="NoFactura" ng-required="true" type="number" ng-minlength="4" ng-unique actionval='api/Ventas/ExisteFactura?factura='>
+                        <input id="NumeroFactura" ng-disabled="!venta.idVentaTipo" ng-model="venta.noFactura" name="NoFactura" ng-required="true" type="number" ng-minlength="1" ng-unique actionval='api/Ventas/ExisteFactura?tipoVenta={{venta.idVentaTipo}}&factura='>
                         <div ng-messages="frmVenta.NoFactura.$error" role="alert">
                             <div ng-message="minlength">Al menos cuatro dígitos</div>
                             <div ng-message="unique">Esta factura ya existe</div>
