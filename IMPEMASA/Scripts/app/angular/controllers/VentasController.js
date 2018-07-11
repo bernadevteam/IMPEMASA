@@ -211,6 +211,7 @@ function DialogVentaController($scope, $mdDialog, $http, $filter, $timeout, mode
     $scope.cliente = {};
     $scope.fechaFactura = {};
     $scope.tiposVenta = tipoventas;
+    var facturaActual = 0;
 
     $scope.$watch('cliente', function (n) {
         if (n.id) {
@@ -221,6 +222,7 @@ function DialogVentaController($scope, $mdDialog, $http, $filter, $timeout, mode
 
     $scope.clientes = clientes;
     if (modelo.id) {
+        facturaActual = modelo.noFactura;
         $scope.cliente = $filter('filter')($scope.clientes, { id: modelo.idCliente }, true)[0];
         $scope.fechaFactura = moment(modelo.fecha, 'MM/DD/YYYY').toDate();
     }
@@ -237,7 +239,7 @@ function DialogVentaController($scope, $mdDialog, $http, $filter, $timeout, mode
             $scope.venta.total = ((st * itbis) + st).toFixed(2);
         }
 
-        if ($scope.venta.noFactura) {
+        if ($scope.venta.noFactura !== facturaActual) {
             $timeout(function () {
                 angular.element('#NumeroFactura').triggerHandler('blur');
             });

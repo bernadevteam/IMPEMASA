@@ -96,7 +96,8 @@ namespace IMPEMASA.Controllers
             {
                 return NotFound();
             }
-
+            IEnumerable<Depositos> depositos = db.Depositos.Where(dp => dp.IdVenta.Equals(id));
+            db.Depositos.RemoveRange(depositos);
             db.Ventas.Remove(ventas);
             db.SaveChanges();
 
