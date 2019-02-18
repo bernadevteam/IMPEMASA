@@ -222,7 +222,7 @@ namespace IMPEMASA.Controllers
                     break;
             }
 
-            if(venta.Fecha.Month > 4 && venta.Fecha.Year > 2017)
+            if((venta.Fecha.Month > 4 && venta.Fecha.Year > 2017) || (venta.Fecha.Month <= 4 && venta.Fecha.Year > 2018))
             {
                 noFactura = prefijo + venta.NoFactura.ToString().PadLeft(11 - prefijo.Length, '0');
             }
