@@ -112,7 +112,7 @@ namespace IMPEMASA.Controllers
             return db.Depositos.Count(e => e.Id == id) > 0;
         }
 
-        private object Convertir(Depositos d)
+        public static object Convertir(Depositos d)
         {
             return new
             {

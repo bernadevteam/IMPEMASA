@@ -1,9 +1,8 @@
 ﻿<md-tabs md-dynamic-height>
-    {{pendientes = (ventas | filter:{pagoPendiente:true});""}}
-    <md-tab label="Pendientes ({{filtradoDias.length}}/{{pendientes.length}})" md-dynamic-height>
+    <md-tab label="Pendientes ({{pendientes.length}})" md-dynamic-height>
         <md-content class="md-padding" layout="row" layout-wrap>
             <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in pendientes | ventaspendientes : navDias | nombreofactura:navFiltro as filtradoDias">
-                <tarjeta-venta></tarjeta-venta>
+                <tarjeta-venta-dash></tarjeta-venta-dash>
             </div>
         </md-content>
     </md-tab>

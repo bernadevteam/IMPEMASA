@@ -28,6 +28,7 @@
     </NuGetPackageImportStamp>
     <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -285,6 +286,9 @@
     <Compile Include="VentaTipos.cs">
       <DependentUpon>ImpemasaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="View_VentasPendientes.cs">
+      <DependentUpon>ImpemasaModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -319,6 +323,7 @@
     <Content Include="Plantillas\FormVenta.html" />
     <Content Include="Plantillas\FormCliente.html" />
     <Content Include="Plantillas\FormCuenta.html" />
+    <Content Include="Plantillas\TarjetaVentaDashboard.html" />
     <Content Include="Plantillas\TarjetaVenta.html" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />

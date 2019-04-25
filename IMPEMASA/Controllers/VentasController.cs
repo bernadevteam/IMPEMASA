@@ -27,7 +27,7 @@ namespace IMPEMASA.Controllers
         [HttpGet]
         public IEnumerable<object> VentasPendientes()
         {
-            return db.Ventas.Where(v => v.PagoPendiente.Value ? true : DbFunctions.DiffDays(v.Fecha, DateTime.Now) <= 60).OrderByDescending(v => v.PagoPendiente).ThenByDescending(v => v.NoFactura).ToList().Select(v => ConvertirVenta(v));
+            return db.View_VentasPendientes.OrderByDescending(v => v.NoFactura).ToList();
         }
 
         [HttpGet]
@@ -35,7 +35,11 @@ namespace IMPEMASA.Controllers
         {
             return db.Ventas.Where(v => v.NoFactura.Equals(factura) && v.IdVentaTipo.Equals(tipoVenta)).ToArray().Length > 0;
         }
-
+        [HttpGet]
+        public IEnumerable<object> VentaDepositos(int idVenta)
+        {
+            return db.Depositos.Where(d => d.IdVenta.Equals(idVenta)).OrderByDescending(v => v.Fecha).ToList().Select(d => DepositosController.Convertir(d));
+        }
         // PUT: api/Ventas/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutVentas(Ventas ventas)
@@ -63,10 +67,7 @@ namespace IMPEMASA.Controllers
                 }
             }
 
-            return Ok(ConvertirVentaPut(db.Ventas.
-                Include(v => v.VentaTipos)
-                .Include(v => v.Clientes)
-                .First(v => ventas.Id.Equals(v.Id))));
+            return Ok(db.View_VentasPendientes.First(v => v.Id.Equals(ventas.Id)));
         }
 
         // POST: api/Ventas
@@ -84,7 +85,7 @@ namespace IMPEMASA.Controllers
             ventas.Clientes = db.Clientes.Find(ventas.IdCliente);
             ventas.VentaTipos = db.VentaTipos.Find(ventas.IdVentaTipo);
 
-            return CreatedAtRoute("DefaultApi", new { id = ventas.Id }, ConvertirVenta(ventas));
+            return CreatedAtRoute("DefaultApi", new { id = ventas.Id }, db.View_VentasPendientes.First(v => v.Id.Equals(ventas.Id)));
         }
 
         // DELETE: api/Ventas/5

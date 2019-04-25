@@ -32,9 +32,10 @@ namespace IMPEMASA
         public virtual DbSet<DepositoTipos> DepositoTipos { get; set; }
         public virtual DbSet<VentaTipos> VentaTipos { get; set; }
         public virtual DbSet<Clientes> Clientes { get; set; }
-        public virtual DbSet<Ventas> Ventas { get; set; }
         public virtual DbSet<Depositos> Depositos { get; set; }
         public virtual DbSet<Autorizados> Autorizados { get; set; }
+        public virtual DbSet<Ventas> Ventas { get; set; }
+        public virtual DbSet<View_VentasPendientes> View_VentasPendientes { get; set; }
     
         public virtual ObjectResult<ReporteBalanceAntiguedad_Result> ReporteBalanceAntiguedad()
         {

@@ -34,7 +34,13 @@
               restrict: 'E',
               templateUrl: 'Plantillas/TarjetaVenta.html?V1.3'
           }
-      })
+    })
+    .directive('tarjetaVentaDash', function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'Plantillas/TarjetaVentaDashboard.html?V1.3'
+        }
+    })
 .controller('VentasController', function ($scope, $filter, $mdSidenav, $mdDialog, $http, $mdToast) {
     $scope.ventas = [];
     $scope.venta = {};
@@ -50,6 +56,7 @@
     urlDepTipos = 'api/DepositoTipos';
 
     $http.get(urlventa + '/VentasPendientes').then(function (res) {
+        $scope.pendientes = res.data;
         $scope.ventas = res.data;
         $http.get(urlDepTipos).then(function (tiposdatas) {
             tiposDeps = tiposdatas.data;
@@ -120,7 +127,13 @@
 
         return total;
     }
-
+    $scope.cargarDepositos = function (venta) {
+        if (!venta.depositos) {
+            $http.get(urlventa + '/VentaDepositos?idVenta='+venta.id).then(function (res) {
+                venta.depositos = res.data;
+            });
+        }
+    };
     var manejoventa = function (ev, ventaSel) {
         var ctaPivot = { pagoPendiente: true };
         angular.merge(ctaPivot, ventaSel);
