@@ -85,6 +85,36 @@
           <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'bernadev.IMPEMASA.View_Ventas' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="View_Ventas">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="IdCliente" />
+            <PropertyRef Name="IdVentaTipo" />
+            <PropertyRef Name="NoFactura" />
+            <PropertyRef Name="SubTotal" />
+            <PropertyRef Name="ITBIS" />
+            <PropertyRef Name="Total" />
+            <PropertyRef Name="RNC" />
+            <PropertyRef Name="Cliente" />
+            <PropertyRef Name="Tipo" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="IdCliente" Type="int" Nullable="false" />
+          <Property Name="IdVentaTipo" Type="int" Nullable="false" />
+          <Property Name="NoFactura" Type="int" Nullable="false" />
+          <Property Name="SubTotal" Type="money" Nullable="false" />
+          <Property Name="Fecha" Type="varchar" MaxLength="30" />
+          <Property Name="FechaVencimiento" Type="varchar" MaxLength="30" />
+          <Property Name="ITBIS" Type="money" Nullable="false" />
+          <Property Name="Total" Type="money" Nullable="false" />
+          <Property Name="RNC" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Cliente" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Tipo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Depositado" Type="money" />
+          <Property Name="DiasPendientes" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'bernadev.IMPEMASA.View_VentasPendientes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="View_VentasPendientes">
           <Key>
@@ -112,7 +142,6 @@ warning 6002: The table/view 'bernadev.IMPEMASA.View_VentasPendientes' does not 
           <Property Name="Cliente" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="Tipo" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Depositado" Type="money" />
-          <Property Name="PagoPendiente" Type="bit" />
           <Property Name="DiasPendientes" Type="int" />
         </EntityType>
         <Association Name="FK_Cuentas_Bancos">
@@ -197,6 +226,24 @@ warning 6002: The table/view 'bernadev.IMPEMASA.View_VentasPendientes' does not 
           <EntitySet Name="DepositoTipos" EntityType="Self.DepositoTipos" Schema="IMPEMASA" store:Type="Tables" />
           <EntitySet Name="Ventas" EntityType="Self.Ventas" Schema="IMPEMASA" store:Type="Tables" />
           <EntitySet Name="VentaTipos" EntityType="Self.VentaTipos" Schema="IMPEMASA" store:Type="Tables" />
+          <EntitySet Name="View_Ventas" EntityType="Self.View_Ventas" store:Type="Views" store:Schema="IMPEMASA">
+            <DefiningQuery>SELECT 
+    [View_Ventas].[Id] AS [Id], 
+    [View_Ventas].[IdCliente] AS [IdCliente], 
+    [View_Ventas].[IdVentaTipo] AS [IdVentaTipo], 
+    [View_Ventas].[NoFactura] AS [NoFactura], 
+    [View_Ventas].[SubTotal] AS [SubTotal], 
+    [View_Ventas].[Fecha] AS [Fecha], 
+    [View_Ventas].[FechaVencimiento] AS [FechaVencimiento], 
+    [View_Ventas].[ITBIS] AS [ITBIS], 
+    [View_Ventas].[Total] AS [Total], 
+    [View_Ventas].[RNC] AS [RNC], 
+    [View_Ventas].[Cliente] AS [Cliente], 
+    [View_Ventas].[Tipo] AS [Tipo], 
+    [View_Ventas].[Depositado] AS [Depositado], 
+    [View_Ventas].[DiasPendientes] AS [DiasPendientes]
+    FROM [IMPEMASA].[View_Ventas] AS [View_Ventas]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="View_VentasPendientes" EntityType="Self.View_VentasPendientes" store:Type="Views" store:Schema="IMPEMASA">
             <DefiningQuery>SELECT 
     [View_VentasPendientes].[Id] AS [Id], 
@@ -212,7 +259,6 @@ warning 6002: The table/view 'bernadev.IMPEMASA.View_VentasPendientes' does not 
     [View_VentasPendientes].[Cliente] AS [Cliente], 
     [View_VentasPendientes].[Tipo] AS [Tipo], 
     [View_VentasPendientes].[Depositado] AS [Depositado], 
-    [View_VentasPendientes].[PagoPendiente] AS [PagoPendiente], 
     [View_VentasPendientes].[DiasPendientes] AS [DiasPendientes]
     FROM [IMPEMASA].[View_VentasPendientes] AS [View_VentasPendientes]</DefiningQuery>
           </EntitySet>
@@ -328,6 +374,7 @@ warning 6002: The table/view 'bernadev.IMPEMASA.View_VentasPendientes' does not 
             <End Role="VentaTipos" EntitySet="VentaTipos" />
             <End Role="Ventas" EntitySet="Ventas" />
           </AssociationSet>
+          <EntitySet Name="View_Ventas" EntityType="IMPEMASAModel.View_Ventas" />
           <EntitySet Name="View_VentasPendientes" EntityType="IMPEMASAModel.View_VentasPendientes" />
         </EntityContainer>
         <EntityType Name="Clientes">
@@ -453,6 +500,34 @@ warning 6002: The table/view 'bernadev.IMPEMASA.View_VentasPendientes' does not 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="View_Ventas">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="IdCliente" />
+            <PropertyRef Name="IdVentaTipo" />
+            <PropertyRef Name="NoFactura" />
+            <PropertyRef Name="SubTotal" />
+            <PropertyRef Name="ITBIS" />
+            <PropertyRef Name="Total" />
+            <PropertyRef Name="RNC" />
+            <PropertyRef Name="Cliente" />
+            <PropertyRef Name="Tipo" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="IdCliente" Type="Int32" Nullable="false" />
+          <Property Name="IdVentaTipo" Type="Int32" Nullable="false" />
+          <Property Name="NoFactura" Type="Int32" Nullable="false" />
+          <Property Name="SubTotal" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Fecha" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="FechaVencimiento" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ITBIS" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Total" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="RNC" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Cliente" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Tipo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Depositado" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="DiasPendientes" Type="Int32" />
+        </EntityType>
         <EntityType Name="View_VentasPendientes">
           <Key>
             <PropertyRef Name="Id" />
@@ -479,7 +554,6 @@ warning 6002: The table/view 'bernadev.IMPEMASA.View_VentasPendientes' does not 
           <Property Name="Cliente" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="Tipo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Depositado" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="PagoPendiente" Type="Boolean" />
           <Property Name="DiasPendientes" Type="Int32" />
         </EntityType>
       </Schema>
@@ -588,11 +662,30 @@ warning 6002: The table/view 'bernadev.IMPEMASA.View_VentasPendientes' does not 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="View_Ventas">
+            <EntityTypeMapping TypeName="IMPEMASAModel.View_Ventas">
+              <MappingFragment StoreEntitySet="View_Ventas">
+                <ScalarProperty Name="DiasPendientes" ColumnName="DiasPendientes" />
+                <ScalarProperty Name="Depositado" ColumnName="Depositado" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+                <ScalarProperty Name="RNC" ColumnName="RNC" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="ITBIS" ColumnName="ITBIS" />
+                <ScalarProperty Name="FechaVencimiento" ColumnName="FechaVencimiento" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="NoFactura" ColumnName="NoFactura" />
+                <ScalarProperty Name="IdVentaTipo" ColumnName="IdVentaTipo" />
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="View_VentasPendientes">
             <EntityTypeMapping TypeName="IMPEMASAModel.View_VentasPendientes">
               <MappingFragment StoreEntitySet="View_VentasPendientes">
                 <ScalarProperty Name="DiasPendientes" ColumnName="DiasPendientes" />
-                <ScalarProperty Name="PagoPendiente" ColumnName="PagoPendiente" />
                 <ScalarProperty Name="Depositado" ColumnName="Depositado" />
                 <ScalarProperty Name="Tipo" ColumnName="Tipo" />
                 <ScalarProperty Name="Cliente" ColumnName="Cliente" />

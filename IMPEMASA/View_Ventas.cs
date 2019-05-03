@@ -12,7 +12,7 @@ namespace IMPEMASA
     using System;
     using System.Collections.Generic;
     
-    public partial class View_VentasPendientes
+    public partial class View_Ventas
     {
         public int Id { get; set; }
         public int IdCliente { get; set; }

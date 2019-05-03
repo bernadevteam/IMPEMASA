@@ -16,14 +16,14 @@
     .filter('ventaspendientes', function () {
         return function (ventas, dias) {
             var pendientes = [];
-
+            var days = +dias;
             angular.forEach(ventas, function (venta) {
-                if (venta.pagoPendiente) {
-                    var minDia = dias - 30;
-                    if (dias > 91 && venta.diasPendientes > 91 || venta.diasPendientes >= minDia && venta.diasPendientes <= dias) {
+                //if (venta.pagoPendiente) {
+                var minDia = days - 30;
+                if (days > 91 && venta.diasPendientes > 91 || venta.diasPendientes >= minDia && venta.diasPendientes <= days) {
                         pendientes.push(venta);
                     }
-                }
+                //}
             });
 
             return pendientes;
@@ -44,6 +44,7 @@
 .controller('VentasController', function ($scope, $filter, $mdSidenav, $mdDialog, $http, $mdToast) {
     $scope.ventas = [];
     $scope.venta = {};
+    $scope.searchText = '';
     var tiposDeps = [],
         clientes = [],
         tiposVentas = [],
@@ -57,7 +58,6 @@
 
     $http.get(urlventa + '/VentasPendientes').then(function (res) {
         $scope.pendientes = res.data;
-        $scope.ventas = res.data;
         $http.get(urlDepTipos).then(function (tiposdatas) {
             tiposDeps = tiposdatas.data;
             $http.get(urlCuentas).then(function (cuentasdata) {
@@ -68,7 +68,11 @@
             });
         });
     });
-
+    $scope.buscarFacturaPorCliente = function (idCliente) {
+        $http.get(urlventa + '/BuscarPorCliente?idCliente=' + idCliente).then(function (res) {
+            $scope.ventas = res.data;
+        });
+    };
     $scope.eliminarVenta = function (ev, venta) {
         var confirm = $mdDialog.confirm()
                  .title('Deseas eliminar esta venta?')
@@ -206,7 +210,7 @@
     };
 
     $scope.editar = manejoventa;
-    $scope.editarDeposito = manejodeposito
+    $scope.editarDeposito = manejodeposito;
 
     function toast(msg) {
         $mdToast.show($mdToast.simple()
@@ -216,6 +220,19 @@
  );
     }
 
+    $scope.filtrarClientes = function (query) {
+        var results = query ? clientes.filter(createFilterFor(query)) : clientes;
+            return results;
+    };
+
+    function createFilterFor(query) {
+        var lowercaseQuery = query.toLowerCase();
+
+        return function filterFn(item) {
+            return item.nombreCompleto.toLowerCase().indexOf(lowercaseQuery) !== -1;
+        };
+
+    }
 });
 
 function DialogVentaController($scope, $mdDialog, $http, $filter, $timeout, modelo, clientes, tipoventas) {

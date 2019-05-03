@@ -6,10 +6,41 @@
             </div>
         </md-content>
     </md-tab>
-    <md-tab label="Todas ({{ventas.length}})">
-        <md-content class="md-padding" layout="row" layout-wrap>
-            <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas | nombreofactura:navFiltro">
-                <tarjeta-venta></tarjeta-venta>
+    <md-tab label="Busqueda">
+        <md-content class="md-padding" layout="column" layout-wrap>
+            <div flex>
+                <md-autocomplete id="custom-template"
+                                 md-no-cache="true"
+                                 md-search-text="searchText"
+                                 md-selected-item-change="buscarFacturaPorCliente(item.id)"
+                                 md-items="item in filtrarClientes(searchText)"
+                                 md-item-text="item.nombreCompleto"
+                                 md-min-length="0"
+                                 input-aria-label="Current Repository"
+                                 md-menu-class="autocomplete-custom-template"
+          md-menu-container-class="custom-container"
+                                 placeholder="Elija un cliente">
+                    <md-item-template>
+                        <div class="item-title">
+                            <md-icon md-svg-icon="img/icons/octicon-repo.svg"></md-icon>
+                            <span> {{item.nombreCompleto}} </span>
+                        </div>
+                        <div class="item-metadata">
+                            <span>
+                                RNC <strong>{{item.rnc}}</strong>
+                            </span>
+                            <span>
+                                Telefono <strong>{{item.telefono}}</strong>
+                            </span>
+                        </div>
+                    </md-item-template>
+                </md-autocomplete>
+            </div>
+            <div flex layout-wrap layout="row">
+                <div flex-xs flex-gt-xs="50" flex-gt-md="33" ng-repeat="venta in ventas | nombreofactura:navFiltro">
+                    @*                <tarjeta-venta></tarjeta-venta>*@
+                    <tarjeta-venta-dash></tarjeta-venta-dash>
+                </div>
             </div>
         </md-content>
 

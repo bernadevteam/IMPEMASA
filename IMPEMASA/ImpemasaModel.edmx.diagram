@@ -19,7 +19,8 @@
         <AssociationConnector Association="IMPEMASAModel.FK_Ventas_Clientes" />
         <AssociationConnector Association="IMPEMASAModel.FK_Depositos_Ventas" />
         <AssociationConnector Association="IMPEMASAModel.FK_Ventas_VentaTipos" />
-        <EntityTypeShape EntityType="IMPEMASAModel.View_VentasPendientes" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="IMPEMASAModel.View_Ventas" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="IMPEMASAModel.View_VentasPendientes" Width="1.5" PointX="7.375" PointY="5.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

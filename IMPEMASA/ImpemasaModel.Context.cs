@@ -35,6 +35,7 @@ namespace IMPEMASA
         public virtual DbSet<Depositos> Depositos { get; set; }
         public virtual DbSet<Autorizados> Autorizados { get; set; }
         public virtual DbSet<Ventas> Ventas { get; set; }
+        public virtual DbSet<View_Ventas> View_Ventas { get; set; }
         public virtual DbSet<View_VentasPendientes> View_VentasPendientes { get; set; }
     
         public virtual ObjectResult<ReporteBalanceAntiguedad_Result> ReporteBalanceAntiguedad()

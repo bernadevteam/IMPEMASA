@@ -29,7 +29,11 @@ namespace IMPEMASA.Controllers
         {
             return db.View_VentasPendientes.OrderByDescending(v => v.NoFactura).ToList();
         }
-
+        [HttpGet]
+        public IEnumerable<object> BuscarPorCliente(int idCliente)
+        {
+            return db.View_VentasPendientes.Where(vp => vp.IdCliente.Equals(idCliente)).OrderByDescending(v => v.NoFactura).ToList();
+        }
         [HttpGet]
         public bool ExisteFactura(int factura, int tipoVenta)
         {

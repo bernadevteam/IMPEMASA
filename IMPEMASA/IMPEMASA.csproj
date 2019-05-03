@@ -286,6 +286,9 @@
     <Compile Include="VentaTipos.cs">
       <DependentUpon>ImpemasaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="View_Ventas.cs">
+      <DependentUpon>ImpemasaModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="View_VentasPendientes.cs">
       <DependentUpon>ImpemasaModel.tt</DependentUpon>
     </Compile>
