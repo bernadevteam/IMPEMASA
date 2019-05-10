@@ -95,13 +95,17 @@
     };
 
     $scope.verEstadoCuenta = function (ev, idCliente) {
-        var pendientes = $filter('filter')($scope.ventas, { idCliente: idCliente, pagoPendiente: true }, true);
+        var pendientes = $filter('filter')($scope.pendientes, { idCliente: idCliente }, true);
         var estadoCliente = $filter('filter')(clientes, { id: idCliente },true)[0];
 
         var sumaPendientes = 0.0;
 
         for (var i in pendientes) {
-            sumaPendientes = sumaPendientes + pendientes[i].totalPendiente;
+            var venta = pendientes[i];
+            if (venta.totalPendiente === undefined) {
+                venta.totalPendiente = venta.total - venta.depositado;
+            }
+            sumaPendientes = sumaPendientes + venta.totalPendiente;
         }
 
         $scope.estadoCuenta = { pendientes: pendientes, cliente: estadoCliente, totalPendiente: sumaPendientes };
